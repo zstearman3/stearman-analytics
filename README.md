@@ -1,11 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the initial application for [*Stearman Analytics*](http://zachstearman.com/)
+a college basketball analytics websit from [Zach Stearman](http://twitter.com/zsspanther)
 
-Things you may want to cover:
+## Getting Started:
 
-* Ruby version
+This initial version of the application is created in Rails 5.0.0.rc2. We might update
+the version when rails releases a production version of Rails 5.
 
 * System dependencies
 
@@ -15,7 +16,11 @@ Things you may want to cover:
 
 * Database initialization
 
-* How to run the test suite
+Ensure that the application is working by running the test suite using:
+
+```
+$ rails spec
+```
 
 * Services (job queues, cache servers, search engines, etc.)
 
