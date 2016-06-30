@@ -1,7 +1,7 @@
 # README
 
 This is the initial application for [*Stearman Analytics*](http://zachstearman.com/)
-a college basketball analytics websit from [Zach Stearman](http://twitter.com/zsspanther)
+a college basketball analytics website from [Zach Stearman](http://twitter.com/zsspanther).
 
 ## Getting Started:
 
