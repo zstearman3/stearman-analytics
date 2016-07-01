@@ -22,6 +22,7 @@ group :development, :test do
   gem 'byebug',      '~> 9.0', platform: :mri
   gem "rails-controller-testing", :git => "https://github.com/rails/rails-controller-testing"
   gem 'rspec-rails', '~> 3.5.0.beta1'
+  gem 'capybara',                 '~> 2.7.1'
 end
 
 group :development do
@@ -35,7 +36,6 @@ group :test do
   gem 'minitest-reporters',       '~> 1.1'
   gem 'guard',                    '~> 2.13'
   gem 'guard-minitest',           '~> 2.4'
-  gem 'capybara',                 '~> 2.7.1'
 end
 
 group :production do
