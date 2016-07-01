@@ -7,7 +7,7 @@ RSpec.describe "static_pages/about.html.erb", type: :view do
   end
   
   it "correctly displays the title of each static page" do
-    expect(page).to have_title("About | StearmanAnalytics")
+    expect(page).to have_title("About | Stearman Analytics")
   end
   
 end

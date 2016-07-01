@@ -7,7 +7,7 @@ RSpec.describe "static_pages/home.html.erb", type: :view do
   end
   
   it "correctly displays the title of the page" do
-    expect(page).to have_title("Home | StearmanAnalytics")
+    expect(page).to have_title("Stearman Analytics")
   end
   
   it "shows the website name in the header" do
