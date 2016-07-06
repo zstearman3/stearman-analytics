@@ -1,6 +1,12 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+
+/******** MIXINS, VARIABLES, ETC. *********/
+
+$gray-medium-light: #eaeaea;
+$crimson-dark: #650000;
+
 /******** UNIVERSAL **********/
 body {
   padding-top: 125px;
@@ -30,8 +36,8 @@ textarea {
 
 .btn {
   color: white;
-  background-color: #650000;
-  border-color: #650000;
+  background-color: $crimson-dark;
+  border-color: $crimson-dark;
 }
 
 .btn:hover {
@@ -130,5 +136,39 @@ p {
   
   .body{
     padding-top: 70px;
+  }
+}
+
+/******** FOOTER **********/
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #777;
+  .container {
+    margin: 0 0 5px;
+    text-align: center;
+  }
+  img{
+    width: 25px;
+    height: 25px;
+  }
+  a {
+    color: #555;
+    &:hover {
+      color: #222;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 15px;
+    }
   }
 }
