@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "static_pages/contact.html.erb", type: :view do
   
   before :each do
-    visit static_pages_contact_path
+    visit contact_path
   end
   
   it "correctly displays the title of each static page" do

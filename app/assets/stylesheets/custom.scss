@@ -5,7 +5,10 @@
 /******** MIXINS, VARIABLES, ETC. *********/
 
 $gray-medium-light: #eaeaea;
+$gray-medium-dark: #393939;
 $crimson-dark: #650000;
+$crimson-darker: #550000;
+$crimson-darkest: #450000;
 
 /******** UNIVERSAL **********/
 body {
@@ -42,13 +45,13 @@ textarea {
 
 .btn:hover {
   color: $gray-lighter;
-  background-color: #550000;
-  border-color: #550000;
+  background-color: $crimson-darker;
+  border-color: $crimson-darker;
 }
 
 .btn:pressed {
-  background-color: #450000;
-  border-color: #450000;
+  background-color: $crimson-darkest;
+  border-color: $crimson-darkest;
 }
 
 /******** TYPOGRAPHY **********/
@@ -81,18 +84,18 @@ p {
 }
 
 /******** HEADER **********/
-
+S
 
 .navbar-inverse{
   text-align: center;
   padding: 15px 0 0 0;
   margin: 0 0 0;
-  background-color: #393939;
+  background-color: $gray-medium-dark;
   .container{
     padding: 0 0 0 0;
   }
   .navbar-nav{
-    background-color: #222;
+    background-color: $gray-darker;
     margin: 15px 0 0 0;
   }
   ul {
@@ -111,8 +114,8 @@ p {
 
 @media screen and (min-width: 768px) {
   .navbar-inverse{
-    border-bottom: thick solid #650000;
-    background-color: #222;
+    border-bottom: thick solid $crimson-dark;
+    background-color: $gray-darker;
     padding: 10px 0 0 0;
     
     #logo{
@@ -144,7 +147,7 @@ p {
 footer {
   margin-top: 45px;
   padding-top: 5px;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid $gray-medium-light;
   color: #777;
   .container {
     margin: 0 0 5px;
@@ -155,9 +158,9 @@ footer {
     height: 25px;
   }
   a {
-    color: #555;
+    color: $gray;
     &:hover {
-      color: #222;
+      color: $gray-darker;
     }
   }
   small {
