@@ -9,4 +9,13 @@ describe "Navigate around site layout" do
     expect(page).to have_link('Contact', :href => contact_path)
     expect(page).to have_link(nil, :href => root_url, count: 2)
   end
+  
+  it "navigates through the links correctly" do
+    visit root_path
+    click_link('Help')
+    expect(page).to have_content('Help Me!')
+    visit root_path
+    click_link('Contact')
+    expect(page).to have_content('Contact Me')
+  end
 end
