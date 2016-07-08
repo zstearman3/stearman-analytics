@@ -10,6 +10,12 @@ $crimson-dark: #650000;
 $crimson-darker: #550000;
 $crimson-darkest: #450000;
 
+@mixin box_sizing {
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
 /******** UNIVERSAL **********/
 body {
   padding-top: 125px;
@@ -171,4 +177,14 @@ footer {
       margin-left: 15px;
     }
   }
+}
+
+/******* MISCELLANEOUS *******/
+
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 50px;
+  @include box_sizing;
 }
