@@ -19,10 +19,11 @@ gem 'jbuilder',                '~> 2.5'
 gem 'pg',                      '~> 0.18'
 
 group :development, :test do
-  gem 'byebug',      '~> 9.0', platform: :mri
+  gem 'byebug',                   '~> 9.0', platform: :mri
   gem "rails-controller-testing", :git => "https://github.com/rails/rails-controller-testing"
-  gem 'rspec-rails', '~> 3.5.0.beta1'
+  gem 'rspec-rails',              '~> 3.5.0.beta1'
   gem 'capybara',                 '~> 2.7.1'
+  gem 'factory_girl_rails',       '~> 4.0'
 end
 
 group :development do
