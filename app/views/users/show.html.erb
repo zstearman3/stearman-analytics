@@ -8,11 +8,14 @@
         </h1>
     </section>
   </aside>
-  <h1>Favorite Teams</h1>
-  <ul>
-      <% @user.favorites.each do |team| %>
-        <li><%= team %></li>
-        <% end %>
-  </ul>
+  <aside class="col-md-8 team-dashboard">
+    <h1>Team Dashboard</h1>
+      <p>This will be where your favorite teams are displayed in the future.</p>
+      <ul>
+          <% @user.favorites.each do |team| %>
+            <li><%= team %></li>
+            <% end %>
+      </ul>
+  </aside>
 </div>
 
