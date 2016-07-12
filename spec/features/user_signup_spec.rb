@@ -19,7 +19,21 @@ describe "User signing page" do
       expect(page).to have_css('div.field_with_errors')
     end
   end
-  
+  it "allows a user to signup with valid information" do
+    expect{signup_with("Test", "User", "test@example.com", 
+                       "foobar")}.to change{ User.count }
+  end
+  describe "with valid signup information" do
+    before :each do
+      signup_with("Test", "User", "test@example.com", "foobar")
+    end
+    it "renders correct view upon valid submission" do
+      expect(page).to have_content("Test User")
+    end
+    it "has the correct title name in user page" do
+      expect(page).to have_title("Test User | Stearman Analytics")
+    end
+  end
 end
 
 def signup_with(first_name, last_name, email, password)
