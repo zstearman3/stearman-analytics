@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   
   before :each do
-    @user = User.new(name: "Example User", email: "user@example.com",
-                     password: "foobar", password_confirmation: "foobar")
+    @user = User.new(first_name: "Example", last_name: "User",
+                     email: "user@example.com", password: "foobar", 
+                     password_confirmation: "foobar")
   end
   
   describe "Set Up User" do
@@ -12,8 +13,13 @@ RSpec.describe User, type: :model do
       expect(@user.valid?).to be_truthy
     end
     
-    it "should not allow name to be empty" do
-      @user.name = "       "
+    it "should not allow first name to be empty" do
+      @user.first_name = "       "
+      expect(@user.valid?).to be_falsey
+    end
+    
+    it "should not allow last name to be empty" do
+      @user.last_name = "       "
       expect(@user.valid?).to be_falsey
     end
     
@@ -22,8 +28,13 @@ RSpec.describe User, type: :model do
       expect(@user.valid?).to be_falsey
     end
     
-    it "should not allow name to be too long" do
-      @user.name = "a" * 51
+    it "should not allow first name to be too long" do
+      @user.first_name = "a" * 31
+      expect(@user.valid?).to be_falsey
+    end
+    
+    it "should not allow last name to be too long" do
+      @user.last_name = "a" * 31
       expect(@user.valid?).to be_falsey
     end
     

@@ -8,5 +8,11 @@
         </h1>
     </section>
   </aside>
+  <h1>Favorite Teams</h1>
+  <ul>
+      <% @user.favorites.each do |team| %>
+        <li><%= team %></li>
+        <% end %>
+  </ul>
 </div>
 
