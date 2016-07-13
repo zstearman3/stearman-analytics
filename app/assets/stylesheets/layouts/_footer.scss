@@ -1,11 +1,25 @@
 footer {
   margin-top: 45px;
-  padding-top: 5px;
-  border-top: 1px solid $gray-medium-light;
+  padding-top: 15px;
   color: #777;
   .container {
     margin: 0 0 5px;
     text-align: center;
+  }
+  .social-icons {
+    width: 100%;
+    ul{
+      text-align: center;
+      width: 100%;
+      padding-left: 0;
+      list-style: none;
+      border-bottom: 1px solid $gray-medium-light;
+      padding-bottom: 5px;
+      margin-bottom: 3px;
+      li{
+        display: inline;
+      }
+    }
   }
   img{
     width: 25px;
@@ -17,15 +31,35 @@ footer {
       color: $gray-darker;
     }
   }
-  small {
-    float: left;
-  }
-  ul {
+  nav{
     float: right;
-    list-style: none;
-    li {
-      float: left;
-      margin-left: 15px;
+    ul {
+      float: right;
+      list-style: none;
+      li {
+        float: left;
+        margin-left: 15px;
+      }
     }
   }
+  .copyright {
+    float: left;
+  }
+}
+
+@media screen and (min-width: 768px) {
+   footer {
+     padding-top: 5px;
+     border-top: 1px solid $gray-medium-light;
+     .social-icons {
+       width: 15%;
+       ul{
+         border-bottom: none;
+         margin-bottom: auto;
+       }
+     }
+     .copyright {
+       clear: both;
+     }
+   }
 }

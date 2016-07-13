@@ -1,0 +1,36 @@
+.btn {
+  color: white;
+  background-color: $crimson-dark;
+  border-color: $crimson-dark;
+}
+
+.btn:hover {
+  color: $gray-lighter;
+  background-color: $crimson-darker;
+  border-color: $crimson-darker;
+}
+
+.btn:pressed {
+  color: $gray-lighter;
+  background-color: $crimson-darkest;
+  border-color: $crimson-darkest;
+  box-shadow: none;
+}
+
+.btn:active {
+  background-color: $crimson-darkest;
+  border-color: $crimson-darkest;
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.btn:focus, .btn:focus:hover, .btn:active:focus {
+  background-color: $crimson-darkest;
+  border-color: $crimson-darkest;
+  box-shadow: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+          box-shadow: none;
+}

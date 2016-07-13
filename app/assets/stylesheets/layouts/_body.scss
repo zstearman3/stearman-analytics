@@ -1,12 +1,12 @@
-/**** UNIVERSAL SCSS THAT SHOULD EVENTUALLY BE MOVED TO OTHER LOCATIONS *****/
+
 body {
   padding-top: 125px;
+  background-color: $gray-lighter;
 }
 
 @media screen and (min-width: 768px) {
   body {
     padding-top: 100px;
-    background-color: $gray-lighter;
   }
 }
 
@@ -24,22 +24,5 @@ textarea {
 
 .center h1 {
   margin-bottom: 10px;
-}
-
-.btn {
-  color: white;
-  background-color: $crimson-dark;
-  border-color: $crimson-dark;
-}
-
-.btn:hover {
-  color: $gray-lighter;
-  background-color: $crimson-darker;
-  border-color: $crimson-darker;
-}
-
-.btn:pressed {
-  background-color: $crimson-darkest;
-  border-color: $crimson-darkest;
 }
 

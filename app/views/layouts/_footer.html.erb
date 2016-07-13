@@ -1,7 +1,10 @@
 <footer class="footer">
-  <!--<%= render 'layouts/social_icons' %>-->
-  <!--This is currently commented out becuase I don't really like it.-->
-  <small> &copy; 2016 Zach Stearman </small>
+  <div class="social-icons col-xs-1">
+    <ul>
+      <li><%= link_to image_tag("twitter-wrap.png", alt: "Connect on twitter."), "http://www.twitter.com/zsspanther", class: 'social-icon' %></li>
+      <li><%= link_to image_tag("facebook-wrap.png", alt: "Connect on facebook."), "http://www.facebook.com/zach.stearman", class: 'social-icon' %></li>
+    </ul>
+  </div>
   <nav>
     <ul>
       <li><%= link_to "Help", help_path %></li>
@@ -9,4 +12,7 @@
       <li><%= link_to "Contact", contact_path %></li>
     </ul>
   </nav>
+  <div class="copyright col-xs-4">
+      <small> &copy; 2016 Zach Stearman </small>
+  </div>
 </footer>
