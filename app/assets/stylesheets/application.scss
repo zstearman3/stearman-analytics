@@ -1,0 +1,30 @@
+@import
+  'abstracts/variables',
+  'abstracts/mixins',
+  'abstracts/miscellaneous';
+
+@import 
+  'vendors/helpers';
+
+@import 
+  'base/typography';
+
+@import 
+  'layouts/header',
+  'layouts/body',
+  'layouts/footer',
+  'layouts/sidebar',
+  'layouts/forms';
+
+/*Empty Placeholder */
+@import 
+  'components/module';
+  
+/*Empty Placeholder */
+@import 
+  'pages/module';
+  
+/*Empty Placeholder */
+@import
+  'themes/module';
+

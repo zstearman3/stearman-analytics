@@ -1,0 +1,31 @@
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid $gray-medium-light;
+  color: #777;
+  .container {
+    margin: 0 0 5px;
+    text-align: center;
+  }
+  img{
+    width: 25px;
+    height: 25px;
+  }
+  a {
+    color: $gray;
+    &:hover {
+      color: $gray-darker;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 15px;
+    }
+  }
+}
