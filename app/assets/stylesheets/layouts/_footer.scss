@@ -44,7 +44,13 @@ footer {
   }
   .copyright {
     float: left;
-    font-size: 1em;
+    font-size: 0.8em;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .copyright {
+    font-size: 1.0em;
   }
 }
 
