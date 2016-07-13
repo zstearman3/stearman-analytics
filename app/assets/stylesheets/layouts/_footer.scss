@@ -14,16 +14,16 @@ footer {
       padding-left: 0;
       list-style: none;
       border-bottom: 1px solid $gray-medium-light;
-      padding-bottom: 5px;
-      margin-bottom: 3px;
+      padding-bottom: 8px;
+      margin-bottom: 5px;
       li{
         display: inline;
       }
     }
   }
   img{
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
   }
   a {
     color: $gray;
@@ -44,6 +44,7 @@ footer {
   }
   .copyright {
     float: left;
+    font-size: 1em;
   }
 }
 
@@ -56,10 +57,16 @@ footer {
        ul{
          border-bottom: none;
          margin-bottom: auto;
+         padding-bottom: auto;
+         img{
+           width: 25px;
+           height: 25px;
+         }
        }
      }
      .copyright {
        clear: both;
+       font-size: 1.2em;
      }
    }
 }
