@@ -5,7 +5,7 @@ footer {
   color: #777;
   .social-icons {
     clear: both;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     ul{
       background-color: $gray-lighter;
       text-align: center;
@@ -14,7 +14,7 @@ footer {
       list-style: none;
       border-bottom: 1px solid $gray-medium-light;
       padding-bottom: 8px;
-      margin-bottom: 5px;
+      margin-bottom: 0;
       li{
         display: inline;
         img{
@@ -52,6 +52,7 @@ footer {
     font-size: 1.0em;
     background-color: $gray-darker;
     color: #9d9d9d;
+    padding-bottom: 10px;
   }
 }
 
@@ -73,6 +74,7 @@ footer {
       .social-icons {
         float: left;
         width: 15%;
+        margin-bottom: 5px;
         ul{
           border-bottom: none;
           margin-bottom: auto;
@@ -88,7 +90,7 @@ footer {
         clear: both;
         text-align: left;
         font-size: 1.2em;
-        margin-top: -20px;
+        margin-top: -15px;
         background: none;
         color: #555;
       }
