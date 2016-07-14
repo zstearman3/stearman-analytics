@@ -1,14 +1,13 @@
 footer {
   margin-top: 45px;
   padding-top: 15px;
+  background-color: $gray-lighter;
   color: #777;
-  .container {
-    margin: 0 0 5px;
-    text-align: center;
-  }
   .social-icons {
-    width: 100%;
+    clear: both;
+    margin-bottom: 10px;
     ul{
+      background-color: $gray-lighter;
       text-align: center;
       width: 100%;
       padding-left: 0;
@@ -18,61 +17,99 @@ footer {
       margin-bottom: 5px;
       li{
         display: inline;
+        img{
+          width: 40px;
+          height: 40px;
+        }
       }
     }
   }
-  img{
-    width: 40px;
-    height: 40px;
-  }
-  a {
-    color: $gray;
-    &:hover {
-      color: $gray-darker;
-    }
-  }
+
   nav{
-    float: right;
+    text-align: center;
+    background-color:$gray-darker;
     ul {
-      float: right;
+      margin-bottom: 0;
       list-style: none;
+      padding: 10px 0;
       li {
-        float: left;
-        margin-left: 15px;
+        display: inline-block;
+        margin: 0 5px;
+        padding-left: none;
+        a {
+          color: #9d9d9d;
+          &:hover {
+            color: white;
+          }
+        }
       }
     }
   }
   .copyright {
-    float: left;
-    font-size: 0.8em;
+    text-align: center;
+    width: 100%;
+    clear: both;
+    font-size: 1.0em;
+    background-color: $gray-darker;
+    color: #9d9d9d;
   }
 }
 
 @media screen and (min-width: 600px) {
   .copyright {
-    font-size: 1.0em;
+    font-size: 1.2em;
   }
 }
 
 @media screen and (min-width: 768px) {
-   footer {
-     padding-top: 5px;
-     border-top: 1px solid $gray-medium-light;
-     .social-icons {
-       width: 15%;
-       ul{
-         border-bottom: none;
-         margin-bottom: auto;
-         padding-bottom: auto;
-         img{
-           width: 25px;
-           height: 25px;
-         }
-       }
-     }
-     .copyright {
-       clear: both;
-       font-size: 1.2em;
-     }
-   }
+  footer {
+    margin: 45px 0 0;
+    padding-top: 5px;
+    border-top: 1px solid $gray-medium-light;
+    .footer-info{
+      width: 65%;
+      margin: 0 auto;
+      text-align: center;
+      .social-icons {
+        float: left;
+        width: 15%;
+        ul{
+          border-bottom: none;
+          margin-bottom: auto;
+          padding-bottom: auto;
+          img{
+            width: 25px;
+            height: 25px;
+          }
+        }
+      }
+      .copyright {
+        float: left;
+        clear: both;
+        text-align: left;
+        font-size: 1.2em;
+        margin-top: -20px;
+        background: none;
+        color: #555;
+      }
+      nav {
+        float: right;
+        clear: none;
+        width: auto; 
+        background-color: $gray-lighter;
+        ul {
+          float: right;
+          li {
+            float: left;
+            a {
+              color: $gray;
+              &:hover {
+              color: $gray-darker;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
