@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160711211838) do
+ActiveRecord::Schema.define(version: 20160714222445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "teams", force: :cascade do |t|
+    t.string   "school_name"
+    t.string   "nickname"
+    t.decimal  "rating"
+    t.decimal  "ortg"
+    t.decimal  "drtg"
+    t.decimal  "tempo"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["school_name"], name: "index_teams_on_school_name", unique: true, using: :btree
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"

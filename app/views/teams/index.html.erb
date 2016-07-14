@@ -1,0 +1,15 @@
+<h1>Rankings</h1>
+<p>This is bogus data for a while just to test the layout.</p>
+
+<table class="teams">
+  <tr>
+    <th><%= "School" %></th>
+    <th><%= "Rating" %></th>
+  </tr>
+  <% @teams.each do |team| %>
+    <tr>
+      <td><%= team.school_name %></td>
+      <td><%= team.rating %></td>
+    </tr>
+  <% end %>
+</table>
