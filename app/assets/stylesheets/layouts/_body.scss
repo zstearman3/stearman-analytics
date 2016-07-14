@@ -1,4 +1,8 @@
 
+.jumbotron {
+  background: none;
+}
+
 body {
   padding-top: 125px;
   background-color: $gray-lighter;
@@ -7,6 +11,10 @@ body {
 @media screen and (min-width: 768px) {
   body {
     padding-top: 100px;
+    // this code is to add a background image to the body: should be #ddd or lighter
+    // background-image: url("background.png");
+    // background-repeat: no-repeat;
+    // background-size: 800px 600px;
   }
 }
 
