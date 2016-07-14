@@ -8,7 +8,7 @@
   </tr>
   <% @teams.each do |team| %>
     <tr>
-      <td><%= team.school_name %></td>
+      <td><%= link_to team.school_name, team %></td>
       <td><%= team.rating %></td>
     </tr>
   <% end %>
