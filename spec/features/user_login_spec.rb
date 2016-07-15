@@ -16,11 +16,20 @@ describe 'Try to login' do
       expect(page).to_not have_content('Invalid email/password combination')
     end
   end
+  describe 'with valid information' do
+    before :each do
+      signup_with("Test", "User", "test@example.com", "foobar")
+      login_with("test@example.com", "foobar")
+    end
+    it "should redirect to user profile" do
+      expect(page).to have_content("Test User")
+    end
+    it "should add 'Account' link" do
+      expect(page).to have_link("Account")
+    end
+    it "should not show 'Log In' link" do
+      expect(page).to_not have_link("Log In")
+    end
+  end
 end
 
-def login_with(email, password)
-  visit login_path
-  fill_in 'Email',    with: email
-  fill_in 'Password', with: password
-  click_button 'Log in'
-end

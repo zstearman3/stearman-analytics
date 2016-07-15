@@ -46,6 +46,18 @@
     .navbar-nav {
       background: none;
       margin: 10px 0 0 0;
+      .dropdown-menu {
+        left: -10px; 
+        li{
+          display: block;
+          a {
+            padding: 5px 15px;
+          }
+          .divider {
+            margin: 7px 0;
+          }
+        }
+      }
     }
   }
 }

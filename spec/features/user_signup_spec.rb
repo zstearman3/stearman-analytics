@@ -36,12 +36,3 @@ describe "User signing page" do
   end
 end
 
-def signup_with(first_name, last_name, email, password)
-  visit signup_path
-  fill_in 'First Name',   with: first_name
-  fill_in 'Last Name',    with: last_name
-  fill_in 'Email',        with: email
-  fill_in 'Password',     with: password
-  fill_in 'Confirmation', with: password
-  click_button 'Create My Account'
-end
