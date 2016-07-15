@@ -11,5 +11,6 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe TeamsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'is waiting for me to add some functionality' do
+  end
 end
