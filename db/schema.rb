@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714222445) do
+ActiveRecord::Schema.define(version: 20160721153651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "team_games", force: :cascade do |t|
+    t.datetime "date"
+    t.integer  "home_score"
+    t.integer  "away_score"
+    t.boolean  "neutral"
+    t.boolean  "overtime"
+    t.string   "home_team"
+    t.string   "away_team"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["away_team"], name: "index_team_games_on_away_team", using: :btree
+    t.index ["home_team"], name: "index_team_games_on_home_team", using: :btree
+  end
 
   create_table "teams", force: :cascade do |t|
     t.string   "school_name"
