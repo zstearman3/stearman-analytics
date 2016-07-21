@@ -33,6 +33,9 @@ describe "User signing page" do
     it "has the correct title name in user page" do
       expect(page).to have_title("Test User | Stearman Analytics")
     end
+    it "logs the user in" do
+      expect(page).to have_link("Account")
+    end
   end
 end
 

@@ -22,7 +22,7 @@ describe 'Try to login' do
   describe 'with valid information' do
     before :each do
       signup_with(@user.first_name, @user.last_name, @user.email, 'password')
-      login_with(@user.email, "password")
+      login_with(@user.email, 'password')
     end
     it "should redirect to user profile" do
       expect(page).to have_content(@user.first_name + " " + @user.last_name)
@@ -32,6 +32,14 @@ describe 'Try to login' do
     end
     it "should not show 'Log In' link" do
       expect(page).to_not have_link("Log In")
+    end
+    describe 'logout after completion' do
+      before :each do 
+        click_link "Log out"
+      end
+      it "should have logged out the user" do
+        expect(page).to_not have_link("Account")
+      end
     end
   end
 end

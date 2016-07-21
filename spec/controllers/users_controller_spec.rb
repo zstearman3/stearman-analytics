@@ -24,5 +24,8 @@ RSpec.describe UsersController, type: :controller do
     it "displays a flash message" do
       expect(flash[:success]).to be_present
     end
+    it "logs in user" do
+      expect(is_logged_in?).to be_truthy
+    end
   end
 end
