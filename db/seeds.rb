@@ -7,14 +7,17 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 Team.create!(school_name: "Oklahoma",
-             rating:      "100.1")
+             nickname: "Sooners",
+             rating:      "0.9111")
              
              
 Team.create!(school_name: "Kansas",
-             rating:      "104.3")
+             nickname: "Jayhawks",
+             rating:      "0.9480")
              
 Team.create!(school_name: "Texas",
-             rating:      "98.1")
+             nickname: "Longhorns",
+             rating:      "0.8269")
              
 @game = Game.create!(date:       "February 8, 2016",
              home_score: 63,
