@@ -1,3 +1,19 @@
 <h1><%= @team.school_name %></h1>
-
-<p><%= @team.games.count %></p>
+<table class="games table table-striped table-bordered sortable">
+  <tr>
+    <th><%= "Date" %></th>
+    <th><%= "Opponent" %></th>
+    <th><%= "Result" %></th>
+  </tr>
+  <% @team.games.each do |game| %>
+    <tr>
+      <td><%= game[:date].to_date %></td>
+      <% if @team.school_name == game[:home_team] %>
+        <td><%= link_to game[:away_team], "/#{game[:away_team]}" %></td>
+      <% else %>
+        <td><%= link_to "@" + game[:home_team], "/#{game[:home_team]}"%></td>
+      <% end %>
+      <td><%= game[:home_score].to_s + "-" + game[:away_score].to_s %></td>
+    </tr>
+  <% end %>
+</table>

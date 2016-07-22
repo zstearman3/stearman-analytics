@@ -1,4 +1,7 @@
 class TeamsController < ApplicationController
+    
+  helper_method :games
+  
   def index
     @teams = Team.all
   end
@@ -6,4 +9,5 @@ class TeamsController < ApplicationController
   def show
     @team = Team.find(params[:id])
   end
+
 end

@@ -6,20 +6,32 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-@Oklahoma = Team.create!(school_name: "Oklahoma",
+Team.create!(school_name: "Oklahoma",
              rating:      "100.1")
              
              
 Team.create!(school_name: "Kansas",
              rating:      "104.3")
              
-@Texas = Team.create!(school_name: "Texas",
+Team.create!(school_name: "Texas",
              rating:      "98.1")
              
-TeamGame.create!(date:       "02/08/2016",
-                 home_score: 63,
-                 away_score: 60,
-                 neutral:    false,
-                 overtime:   false,
-                 home_team:  @Oklahoma,
-                 away_team:  @Texas)
+@game = Game.create!(date:       "February 8, 2016",
+             home_score: 63,
+             away_score: 60,
+             neutral:    false,
+             overtime:   false,
+             home_team:  "Oklahoma",
+             away_team:  "Texas")
+             
+@game.teams = Team.where(:school_name => ['Oklahoma', 'Texas'])
+                 
+@game = Game.create!(date:       "February 6, 2016",
+             home_score: 109,
+             away_score: 106,
+             neutral:    false,
+             overtime:   false,
+             home_team:  "Kansas",
+             away_team:  "Oklahoma")
+             
+@game.teams = Team.where(:school_name => ['Kansas', 'Oklahoma'])

@@ -1,7 +1,3 @@
 class Team < ApplicationRecord
-  has_many :team_games
-  
-  def games
-    TeamGame.where('home_team = ? OR away_team = ?', id, id)
-  end
+  has_and_belongs_to_many :games
 end

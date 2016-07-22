@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20160721153651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "team_games", force: :cascade do |t|
+  create_table "games", force: :cascade do |t|
     t.datetime "date"
     t.integer  "home_score"
     t.integer  "away_score"
@@ -25,8 +25,13 @@ ActiveRecord::Schema.define(version: 20160721153651) do
     t.string   "away_team"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["away_team"], name: "index_team_games_on_away_team", using: :btree
-    t.index ["home_team"], name: "index_team_games_on_home_team", using: :btree
+  end
+
+  create_table "games_teams", id: false, force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "team_id"
+    t.index ["game_id"], name: "index_games_teams_on_game_id", using: :btree
+    t.index ["team_id"], name: "index_games_teams_on_team_id", using: :btree
   end
 
   create_table "teams", force: :cascade do |t|
