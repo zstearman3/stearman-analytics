@@ -7,7 +7,7 @@ class TeamsController < ApplicationController
   end
   
   def show
-    @team = Team.find(params[:id])
+    @team = Team.find_by_school_name(params[:id])
   end
 
 end
