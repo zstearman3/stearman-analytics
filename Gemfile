@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',                   '>= 5.0.0.rc2', '< 5.1'
+gem 'rails',                   '>= 5.0.0'
 gem 'bcrypt',                  '~> 3.1'
 gem 'faker',                   '~> 1.6'
 gem 'carrierwave',             '~> 0.11'
@@ -17,13 +17,12 @@ gem 'jquery-rails',            '~> 4.1'
 gem 'turbolinks',              '~> 5.x'
 gem 'jbuilder',                '~> 2.5'
 gem 'pg',                      '~> 0.18'
-gem 'octicons-rails',          '~> 2.1'
 gem 'nokogiri',                '~> 1.6'
 
 group :development, :test do
   gem 'byebug',                   '~> 9.0', platform: :mri
   gem "rails-controller-testing", :git => "https://github.com/rails/rails-controller-testing"
-  gem 'rspec-rails',              '~> 3.5.0.beta1'
+  gem 'rspec-rails',              '~> 3.5.0'
   gem 'capybara',                 '~> 2.7.1'
   gem 'factory_girl_rails',       '~> 4.0'
 end
