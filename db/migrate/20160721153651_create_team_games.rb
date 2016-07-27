@@ -4,8 +4,8 @@ class CreateTeamGames < ActiveRecord::Migration[5.0]
       t.datetime :date
       t.integer :home_score
       t.integer :away_score
-      t.boolean :neutral
-      t.boolean :overtime
+      t.string :neutral
+      t.integer :overtime
       t.string :home_team
       t.string :away_team
       

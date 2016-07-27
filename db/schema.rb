@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20160723060149) do
     t.datetime "date"
     t.integer  "home_score"
     t.integer  "away_score"
-    t.boolean  "neutral"
-    t.boolean  "overtime"
+    t.string   "neutral"
+    t.integer  "overtime"
     t.string   "home_team"
     t.string   "away_team"
     t.datetime "created_at", null: false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20160723060149) do
     t.datetime "updated_at",    null: false
     t.string   "team_page"
     t.string   "schedule_page"
+    t.string   "conference"
     t.index ["school_name"], name: "index_teams_on_school_name", unique: true, using: :btree
   end
 

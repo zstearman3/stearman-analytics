@@ -6,35 +6,35 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Team.create!(school_name: "Oklahoma",
-             nickname: "Sooners",
-             rating:      "0.9111")
-             
-             
-Team.create!(school_name: "Kansas",
-             nickname: "Jayhawks",
-             rating:      "0.9480")
-             
-Team.create!(school_name: "Texas",
-             nickname: "Longhorns",
-             rating:      "0.8269")
-             
-@game = Game.create!(date:       "February 8, 2016",
-             home_score: 63,
-             away_score: 60,
-             neutral:    false,
-             overtime:   false,
-             home_team:  "Oklahoma",
-             away_team:  "Texas")
-             
-@game.teams = Team.where(:school_name => ['Oklahoma', 'Texas'])
-                 
-@game = Game.create!(date:       "February 6, 2016",
-             home_score: 109,
-             away_score: 106,
-             neutral:    false,
-             overtime:   false,
-             home_team:  "Kansas",
-             away_team:  "Oklahoma")
-             
-@game.teams = Team.where(:school_name => ['Kansas', 'Oklahoma'])
+require 'csv'
+
+teams_text = File.read(Rails.root.join('lib', 'seeds', '2016Teams.csv'))
+csv = CSV.parse(teams_text, :headers => true, :encoding => 'ISO-8859-1')
+csv.each do |team|
+  puts team.to_hash
+  t = Team.new
+  t.school_name = team['school_name']
+  t.nickname = team['nickname']
+  t.conference = team['conference']
+  t.save
+  puts "#{t.school_name} saved"
+end
+
+puts "There are now #{Team.count} teams in the database"
+
+schedule_text = File.read(Rails.root.join('lib', 'seeds', '2016Schedule.csv'))
+csv = CSV.parse(schedule_text, :headers => true, :encoding => 'ISO-8859-1')
+csv.each do |game|
+  t = Game.new
+  t.date = game['date'].to_s
+  t.home_team = game['home_team']
+  t.away_team = game['away_team']
+  t.home_score = game['home_score']
+  t.away_score = game['away_score']
+  t.neutral = game['neutral']
+  t.overtime = game['overtime'] || 0
+  t.teams = Team.where(:school_name => [game['home_team'], game['away_team']])
+  t.save
+end
+
+puts "There are now #{Game.count} games in the database"
