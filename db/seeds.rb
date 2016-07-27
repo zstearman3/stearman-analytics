@@ -26,7 +26,7 @@ schedule_text = File.read(Rails.root.join('lib', 'seeds', '2016Schedule.csv'))
 csv = CSV.parse(schedule_text, :headers => true, :encoding => 'ISO-8859-1')
 csv.each do |game|
   t = Game.new
-  t.date = game['date'].to_s
+  t.date = Date.strptime(game['date'], "%m/%d/%Y")
   t.home_team = game['home_team']
   t.away_team = game['away_team']
   t.home_score = game['home_score']
