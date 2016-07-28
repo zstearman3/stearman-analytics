@@ -3,7 +3,8 @@ class TeamsController < ApplicationController
   helper_method :games
   
   def index
-    @teams = Team.all
+    @q = Team.ransack(params[:q])
+    @teams = @q.result(distinct: true)
   end
   
   def show

@@ -18,6 +18,7 @@ gem 'turbolinks',              '~> 5.x'
 gem 'jbuilder',                '~> 2.5'
 gem 'pg',                      '~> 0.18'
 gem 'nokogiri',                '~> 1.6'
+gem 'ransack'
 
 group :development, :test do
   gem 'byebug',                   '~> 9.0', platform: :mri

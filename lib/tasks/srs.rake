@@ -29,12 +29,20 @@ namespace :srs do
           oldrating = current_team.rating
           current_team.rating = current_team.rating + ((1.0/(team.games.count)) * opp_rating)
           current_team.rating = current_team.rating.round(1)
+          rank = Team.where("rating > ?", current_team.rating).count + 1
+          current_team.rank = rank
           current_team.save
           error = error + (current_team.rating - oldrating).abs
           error = error.round(1)
         end
       end
       puts error
+    end
+    Team.all.each do |team|
+      current_team = Team.find_by(school_name: team.school_name)
+      rank = Team.where("rating > ?", current_team.rating).count + 1
+      current_team.rank = rank
+      current_team.save
     end
   end
 end
