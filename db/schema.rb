@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160723060149) do
+ActiveRecord::Schema.define(version: 20160728163650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20160723060149) do
     t.string   "team_page"
     t.string   "schedule_page"
     t.string   "conference"
+    t.decimal  "point_margin"
     t.index ["school_name"], name: "index_teams_on_school_name", unique: true, using: :btree
   end
 

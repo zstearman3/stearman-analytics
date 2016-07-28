@@ -33,8 +33,22 @@ csv.each do |game|
   t.away_score = game['away_score']
   t.neutral = game['neutral']
   t.overtime = game['overtime'] || 0
-  t.teams = Team.where(:school_name => [game['home_team'], game['away_team']])
-  t.save
+  hometeam = Team.find_by(school_name: game['home_team'])
+  awayteam = Team.find_by(school_name: game['away_team'])
+  if !hometeam.nil? && !awayteam.nil?
+    t.teams = Team.where(:school_name => [game['home_team'], game['away_team']])
+    t.save
+  end
+  if !hometeam.nil? && !awayteam.nil?
+    margin = game['home_score'].to_i - game['away_score'].to_i
+    hometeam.point_margin ||= 0
+    awayteam.point_margin ||= 0
+    hometeam.point_margin += margin
+    awayteam.point_margin -= margin
+    hometeam.save
+    awayteam.save
+    puts hometeam.nickname + " has a point margin of #{hometeam.point_margin}"
+  end
 end
 
 puts "There are now #{Game.count} games in the database"

@@ -1,10 +1,10 @@
 <% nickname = @team.nickname || "?" %>
 <h1 class="team-header"><strong><%= @team.school_name + " " %></strong><%= nickname %></h1>
-<table class="games table table-striped table-bordered sortable">
+<table class="games table table-striped table-bordered" >
   <tr>
-    <th><%= "Date" %></th>
-    <th><%= "Opponent" %></th>
-    <th><%= "Result" %></th>
+    <th data-field="date" data-sortable="true"><%= "Date" %></th>
+    <th data-field="opponent" data-sortable="false"><%= "Opponent" %></th>
+    <th data-field="opponent" data-sortable="false"><%= "Result" %></th>
   </tr>
   <% @team.games.each do |game| %>
     <% result = "L" %>

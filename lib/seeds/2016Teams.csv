@@ -9,7 +9,7 @@ Albany,Great Danes,AE
 Alcorn State,Braves,SWAC
 American,Eagles,Pat
 Appalachian State,Mountaineers,SB
-Arizona ,Wildcats,P12
+Arizona,Wildcats,P12
 Arizona State,Sun Devils,P12
 Arkansas,Razorbacks,SEC
 Arkansas Little Rock,Trojans,SB
@@ -17,9 +17,9 @@ Arkansas Pine Bluff,Golden Lions,SWAC
 Arkansas State,Red Wolves,SB
 Army,Black Knights,Pat
 Auburn,Tigers,SEC
-Austin Peay ,Governors,OVC
+Austin Peay,Governors,OVC
 Ball State,Cardinals,MAC
-Baylor ,Bears,B12
+Baylor,Bears,B12
 Belmont,Bruins,OVC
 Bethune Cookman,Wildcats,MEAC
 Binghamton,Bearcats,AE
@@ -31,14 +31,14 @@ Bradley,Braves,MVC
 Brown,Bears,Ivy
 Bryant,Bulldogs,NEC
 Bucknell,Bison,Pat
-Buffalo ,Bulls,MAC
-Butler ,Bulldogs,BE
+Buffalo,Bulls,MAC
+Butler,Bulldogs,BE
 BYU,Cougars,WCC
 Cal Poly,Mustangs,BW
-Cal State Bakersfield ,Roadrunners,WAC
+Cal State Bakersfield,Roadrunners,WAC
 Cal State Fullerton,Titans,BW
 Cal State Northridge,Matadors,BW
-California ,Golden Bears,P12
+California,Golden Bears,P12
 Campbell,Fighting Camels,BSth
 Canisius,Golden Griffins,MAAC
 Central Arkansas,Bears,Slnd
@@ -48,22 +48,22 @@ Charleston Southern,Buccaneers,BSth
 Charlotte,49ers,CUSA
 Chattanooga,Mocs,SC
 Chicago State,Cougars,WAC
-Cincinnati ,Bearcats,Amer
+Cincinnati,Bearcats,Amer
 Clemson,Tigers,ACC
 Cleveland State,Vikings,Horz
 Coastal Carolina,Chanticleers,BSth
 Colgate,Raiders,Pat
 College of Charleston,Cougars,CAA
-Colorado ,Buffaloes,P12
+Colorado,Buffaloes,P12
 Colorado State,Rams,MWC
 Columbia,Lions,Ivy
-Connecticut ,Huskies,Amer
+Connecticut,Huskies,Amer
 Coppin State,Eagles,MEAC
 Cornell,Big Red,Ivy
 Creighton,Blue Jays,BE
 Dartmouth,Big Green,Ivy
 Davidson,Wildcats,A10
-Dayton ,Flyers,A10
+Dayton,Flyers,A10
 Delaware,Fightin' Blue Hens,CAA
 Delaware State,Hornets,MEAC
 Denver,Pioneers,Sum
@@ -71,7 +71,7 @@ DePaul,Blue Demons,BE
 Detroit,Titans,Horz
 Drake,Bulldogs,MVC
 Drexel,Dragons,CAA
-Duke ,Blue Devils,ACC
+Duke,Blue Devils,ACC
 Duquesne,Dukes,A10
 East Carolina,Pirates,Amer
 East Tennessee State,Buccaneers,SC
@@ -82,15 +82,15 @@ Eastern Washington,Eagles,BSky
 Elon,Pheonix,CAA
 Evansville,Purple Aces,MVC
 Fairfield,Stags,MAAC
-Fairleigh Dickinson ,Knights,NEC
+Fairleigh Dickinson,Knights,NEC
 FIU,Golden Panthers,CUSA
 Florida,Gators,SEC
 Florida A&M,Rattlers,MEAC
 Florida Atlantic,Owls,CUSA
-Florida Gulf Coast ,Eagles,ASun
+Florida Gulf Coast,Eagles,ASun
 Florida State,Seminoles,ACC
 Fordham,Rams,A10
-Fresno State ,Bulldogs,MWC
+Fresno State,Bulldogs,MWC
 Furman,Paladins,SC
 Gardner Webb,Runnin' Bulldogs,BSth
 George Mason,Patriots,A10
@@ -100,17 +100,17 @@ Georgia,Bulldogs,SEC
 Georgia Southern,Eagles,SB
 Georgia State,Panthers,SB
 Georgia Tech,Yellow Jackets,ACC
-Gonzaga ,Bulldogs,WCC
+Gonzaga,Bulldogs,WCC
 Grambling State,Tigers,SWAC
 Grand Canyon,Lopes,WAC
-Green Bay ,Pheonix,Horz
-Hampton ,Pirates,MEAC
+Green Bay,Pheonix,Horz
+Hampton,Pirates,MEAC
 Hartford,Hawks,AE
 Harvard,Crimson,Ivy
-Hawaii ,Rainbow Warriors,BW
+Hawaii,Rainbow Warriors,BW
 High Point,Panthers,BSth
 Hofstra,Pride,CAA
-Holy Cross ,Crusaders,Pat
+Holy Cross,Crusaders,Pat
 Houston,Cougars,Amer
 Houston Baptist,Huskies,Slnd
 Howard,Bison,MEAC
@@ -120,11 +120,11 @@ Illinois,Fighting Illini,B10
 Illinois Chicago,Flames,Horz
 Illinois State,Redbirds,MVC
 Incarnate Word,Cardinals,Slnd
-Indiana ,Hoosiers,B10
+Indiana,Hoosiers,B10
 Indiana State,Sycamores,MVC
-Iona ,Gaels,MAAC
-Iowa ,Hawkeyes,B10
-Iowa State ,Cyclones,B12
+Iona,Gaels,MAAC
+Iowa,Hawkeyes,B10
+Iowa State,Cyclones,B12
 IPFW,Mastodons,Sum
 IUPUI,Jaguars,Sum
 Jackson State,Tigers,SWAC
@@ -135,7 +135,7 @@ Kansas,Jayhawks,B12
 Kansas State,Wildcats,B12
 Kennesaw State,Owls,ASun
 Kent State,Golden Flashes,MAC
-Kentucky ,Wildcats,SEC
+Kentucky,Wildcats,SEC
 La Salle,Explorers,A10
 Lafayette,Leopards,Pat
 Lamar,Cardinals,Slnd
@@ -158,7 +158,7 @@ Manhattan,Jaspers,MAAC
 Marist,Red Foxes,MAAC
 Marquette,Golden Eagles,BE
 Marshall,Thundering Herd,CUSA
-Maryland ,Terrapins,B10
+Maryland,Terrapins,B10
 Maryland Eastern Shore,Hawks,MEAC
 Massachusetts,Minutemen,A10
 McNeese State,Cowboys,Slnd
@@ -166,9 +166,9 @@ Memphis,Tigers,Amer
 Mercer,Bears,SC
 Miami,Hurricanes,ACC
 Miami OH,RedHawks,MAC
-Michigan ,Wolverines,B10
+Michigan,Wolverines,B10
 Michigan State,Spartans,B10
-Middle Tennessee ,Blue Raiders,CUSA
+Middle Tennessee,Blue Raiders,CUSA
 Milwaukee,Panthers,Horz
 Minnesota,Golden Gophers,B10
 Mississippi,Rebels,SEC
@@ -181,7 +181,7 @@ Montana,Grizzlies,BSky
 Montana State,Bobcats,BSky
 Morehead State,Eagles,OVC
 Morgan State,Bears,MEAC
-Mount State Mary's,Mountaineers,NEC
+Mount St Mary's,Mountaineers,NEC
 Murray State,Racers,OVC
 Navy,Midshipmen,Pat
 Nebraska,Cornhuskers,B10
@@ -207,11 +207,11 @@ Northeastern,Huskies,CAA
 Northern Arizona,Lumberjacks,BSky
 Northern Colorado,Bears,BSky
 Northern Illinois,Huskies,MAC
-Northern Iowa ,Panthers,MVC
+Northern Iowa,Panthers,MVC
 Northern Kentucky,Norse,Horz
 Northwestern,Wildcats,B10
 Northwestern State,Demons,Slnd
-Notre Dame ,Fighting Irish,ACC
+Notre Dame,Fighting Irish,ACC
 Oakland,Golden Grizzlies,Horz
 Ohio,Bobcats,MAC
 Ohio State,Buckeyes,B10
@@ -220,7 +220,7 @@ Oklahoma State,Cowboys,B12
 Old Dominion,Monarchs,CUSA
 Oral Roberts,Golden Eagles,Sum
 Oregon,Ducks,P12
-Oregon State ,Beavers,P12
+Oregon State,Beavers,P12
 Pacific,Tigers,WCC
 Penn,Quakers,Ivy
 Penn State,Nittany Lions,B10
@@ -231,8 +231,8 @@ Portland State,Vikings,BSky
 Prairie View A&M,Panthers,SWAC
 Presbyterian,Blue Hose,BSth
 Princeton,Tigers,Ivy
-Providence ,Friars,BE
-Purdue ,Boilermakers,B10
+Providence,Friars,BE
+Purdue,Boilermakers,B10
 Quinnipiac,Bobcats,MAAC
 Radford,Highlanders,BSth
 Rhode Island,Rams,A10
@@ -243,7 +243,7 @@ Robert Morris,Colonials,NEC
 Rutgers,Scarlet Knights,B10
 Sacramento State,Hornets,BSky
 Sacred Heart,Pioneers,NEC
-Saint Joseph's ,Hawks,A10
+Saint Joseph's,Hawks,A10
 Saint Louis,Billikens,A10
 Saint Mary's,Gaels,WCC
 Saint Peter's,Peacocks,MAAC
@@ -256,7 +256,7 @@ San Jose State,Spartans,MWC
 Santa Clara,Broncos,WCC
 Savannah State,Tigers,MEAC
 Seattle,Redhawks,WAC
-Seton Hall ,Pirates,BE
+Seton Hall,Pirates,BE
 Siena,Saints,MAAC
 SIU Edwardsville,Cougars,OVC
 SMU,Mustangs,Amer
@@ -268,37 +268,37 @@ South Dakota State,Jackrabbits,Sum
 South Florida,Bulls,Amer
 Southeast Missouri State,Redhawks,OVC
 Southeastern Louisiana,Lions,Slnd
-Southern ,Jaguars,SWAC
+Southern,Jaguars,SWAC
 Southern Illinois,Salukis,MVC
 Southern Mississippi,Golden Eagles,CUSA
 Southern Utah,Thunderbirds,BSky
-St. Bonaventure,Bonnies,A10
-St. Francis NY,Terriers,NEC
-St. Francis PA,Red Flash,NEC
-St. John's,Red Storm,BE
+St Bonaventure,Bonnies,A10
+St Francis NY,Terriers,NEC
+St Francis PA,Red Flash,NEC
+St John's,Red Storm,BE
 Stanford,Cardinal,P12
-Stephen F. Austin ,Lumberjacks,Slnd
+Stephen F. Austin,Lumberjacks,Slnd
 Stetson,Mad Hatters,ASun
-Stony Brook ,Seawolves,AE
-Syracuse ,Orange,ACC
+Stony Brook,Seawolves,AE
+Syracuse,Orange,ACC
 TCU,Horned Frogs,B12
 Temple,Owls,Amer
 Tennessee,Volunteers,SEC
 Tennessee Martin,Skyhawks,OVC
 Tennessee State,Tigers,OVC
 Tennessee Tech,Golden Eagles,OVC
-Texas ,Longhorns,B12
-Texas A&M ,Aggies,SEC
+Texas,Longhorns,B12
+Texas A&M,Aggies,SEC
 Texas A&M Corpus Chris,Islanders,Slnd
 Texas Southern,Tigers,SWAC
 Texas State,Bobcats,SB
-Texas Tech ,Red Raiders,B12
+Texas Tech,Red Raiders,B12
 The Citadel,Bulldogs,SC
 Toledo,Rockets,MAC
 Towson,Tigers,CAA
 Troy,Trojans,SB
 Tulane,Green Wave,Amer
-Tulsa ,Golden Hurricane,Amer
+Tulsa,Golden Hurricane,Amer
 UAB,Blazers,CUSA
 UC Davis,Aggies,BW
 UC Irvine,Anteaters,BW
@@ -309,21 +309,21 @@ UCLA,Bruins,P12
 UMass Lowell,River Hawks,AE
 UMBC,Retrievers,AE
 UMKC,Kangaroos,WAC
-UNC Asheville ,Bulldogs,BSth
+UNC Asheville,Bulldogs,BSth
 UNC Greensboro,Spartans,SC
-UNC Wilmington ,Seahawks,CAA
+UNC Wilmington,Seahawks,CAA
 UNLV,Runnin' Rebels,MWC
-USC ,Trojans,P12
+USC,Trojans,P12
 USC Upstate,Spartans,ASun
 UT Arlington,Mavericks,SB
 UT Rio Grande Valley,Vaqueros,WAC
-Utah ,Runnin' Utes,P12
+Utah,Runnin' Utes,P12
 Utah State,Aggies,MWC
 Utah Valley,Wolverines,WAC
 UTEP,Miners,CUSA
 UTSA,Roadrunners,CUSA
 Valparaiso,Crusaders,Horz
-Vanderbilt ,Commodores,SEC
+Vanderbilt,Commodores,SEC
 VCU,Rams,A10
 Vermont,Catamounts,AE
 Villanova,Wildcats,BE
@@ -334,16 +334,16 @@ Wagner,Seahawks,NEC
 Wake Forest,Demon Deacons,ACC
 Washington,Huskies,P12
 Washington State,Cougars,P12
-Weber State ,Wildcats,BSky
-West Virginia ,Mountaineers,B12
+Weber State,Wildcats,BSky
+West Virginia,Mountaineers,B12
 Western Carolina,Catamounts,SC
 Western Illinois,Leathernecks,Sum
 Western Kentucky,Hilltoppers,CUSA
 Western Michigan,Broncos,MAC
-Wichita State ,Shockers,MVC
+Wichita State,Shockers,MVC
 William & Mary,Tribe,CAA
 Winthrop,Eagles,BSth
-Wisconsin ,Badgers,B10
+Wisconsin,Badgers,B10
 Wofford,Terriers,SC
 Wright State,Raiders,Horz
 Wyoming,Cowboys,MWC
