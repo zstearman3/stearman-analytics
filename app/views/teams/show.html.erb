@@ -17,7 +17,11 @@
         <td><%= link_to "@" + game[:home_team], "/teams/#{game[:home_team]}"%></td>
         <% result = "W" if game.away_score > game.home_score %>
       <% end %>
-      <td><%= result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s %></td>
+      <% if game[:overtime] != 0 %>
+        <td><%= result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s + " " +  game[:overtime].to_s + "OT" %></td>
+      <% else %>
+        <td><%= result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s %></td>
+      <% end %>
     </tr>
   <% end %>
 </table>
