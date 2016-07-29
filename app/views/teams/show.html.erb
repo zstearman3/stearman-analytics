@@ -1,5 +1,7 @@
 <% nickname = @team.nickname || "?" %>
 <h1 class="team-header"><strong><%= @team.school_name + " " %></strong><%= nickname %></h1>
+<h2 class="record"><%= "Overall: " + @team.wins.to_s + "-" + @team.losses.to_s + 
+                       " --- " + @team.conference + ": (" + @team.conf_wins.to_s + "-" + @team.conf_losses.to_s + ")" %></h2>
 <table class="games table table-striped table-bordered" >
   <tr>
     <th data-field="date" data-sortable="true"><%= "Date" %></th>

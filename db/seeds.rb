@@ -45,6 +45,30 @@ csv.each do |game|
     awayteam.point_margin ||= 0
     hometeam.point_margin += margin
     awayteam.point_margin -= margin
+    hometeam.wins ||= 0
+    hometeam.losses ||= 0
+    hometeam.conf_wins ||= 0
+    hometeam.conf_losses ||= 0
+    awayteam.wins ||= 0
+    awayteam.losses ||= 0
+    awayteam.conf_wins ||= 0
+    awayteam.conf_losses ||= 0
+    if margin > 0 
+      hometeam.wins += 1
+      awayteam.losses += 1
+    else
+      awayteam.wins += 1
+      hometeam.losses += 1
+    end
+    if hometeam.conference == awayteam.conference
+      if margin > 0 
+        hometeam.conf_wins += 1
+        awayteam.conf_losses += 1
+      else
+        awayteam.conf_wins += 1
+        hometeam.conf_losses += 1
+      end
+    end
     hometeam.save
     awayteam.save
     puts hometeam.nickname + " has a point margin of #{hometeam.point_margin}"
