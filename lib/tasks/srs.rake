@@ -4,11 +4,11 @@ namespace :srs do
   
   task :simple_rating => :environment do
     Team.all.each do |team|
-      team.rating = team.point_margin
+      team.rating = (team.point_margin/ team.games.count)
       team.save
       puts team.rating
     end
-    1.times do
+    6.times do
     error = 0
       Team.all.each do |team|
         current_team = Team.find_by(school_name: team.school_name)
@@ -27,7 +27,7 @@ namespace :srs do
         end
         if team.games.count != 0
           oldrating = current_team.rating
-          current_team.rating = current_team.rating + ((1.0/(team.games.count)) * opp_rating)
+          current_team.rating = (team.point_margin/team.games.count) + ((1.0/(team.games.count)) * opp_rating) + 1.75
           current_team.rating = current_team.rating.round(1)
           rank = Team.where("rating > ?", current_team.rating).count + 1
           current_team.rank = rank
@@ -36,6 +36,7 @@ namespace :srs do
           error = error.round(1)
         end
       end
+      puts Team.first.rating
       puts error
     end
     Team.all.each do |team|

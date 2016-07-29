@@ -4,6 +4,7 @@ class TeamsController < ApplicationController
   
   def index
     @q = Team.ransack(params[:q])
+    @q.sorts = 'rank asc'
     @teams = @q.result(distinct: true)
   end
   
