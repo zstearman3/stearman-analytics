@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "User signing page" do
-  it "doesn't allow signup with invallid information" do
+  it "doesn't allow signup with invalid information" do
     expect{signup_with("Test", "User", "test@example,com", 
                        "foobar")}.to_not change{ User.count }
   end

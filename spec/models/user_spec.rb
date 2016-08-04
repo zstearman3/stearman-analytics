@@ -89,5 +89,10 @@ RSpec.describe User, type: :model do
       @user.password = "foobaz"
       expect(@user.valid?).to be_falsey
     end
+    
+    it "should not authenticate a user with no remember token" do
+      expect(@user.authenticated?('')).to be_falsey
+    end
+    
   end
 end
