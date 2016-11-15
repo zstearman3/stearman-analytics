@@ -20,6 +20,8 @@ gem 'pg',                      '~> 0.18'
 gem 'nokogiri',                '~> 1.6'
 gem 'ransack'
 
+
+
 group :development, :test do
   gem 'byebug',                   '~> 9.0', platform: :mri
   gem "rails-controller-testing", :git => "https://github.com/rails/rails-controller-testing"

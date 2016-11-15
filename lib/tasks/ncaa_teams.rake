@@ -45,11 +45,30 @@ namespace :ncaa_teams do
   
   task :get_schedules => :environment do
     #Team.all.each do |team|
-     team = Team.first
-     url = team.schedule_page
-     doc = Nokogiri::HTML(open(url))
-     game = doc
-     puts game
-    #end
+    team = Team.first
+    puts team
+    url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/20161111'
+    doc = Nokogiri::HTML(open(url))
+    doc = doc.css(".scoreBox").first(3).each do |game|
+      game = game.css('.gameTracker').attr('href')
+      game = 'http://www.cbssports.com' + game
+      game = Nokogiri::HTML(open(game))
+      x = 0
+      away = ""
+      home = ""
+      game = game.css('.data').each do |gteam|
+        if x == 0
+          away = gteam.css('.title').text
+        else
+          home = gteam.css('.title').text
+        end
+        x = x + 1
+      end
+      x = 0
+    #   headless.start
+    #   browser = Watir::Browser.new
+    puts away + ' @ ' + home
+    #  headless.destroy
+    end
   end
 end
