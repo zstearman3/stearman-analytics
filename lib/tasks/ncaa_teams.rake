@@ -9,13 +9,30 @@ namespace :ncaa_teams do
     require 'nokogiri'
     require 'open-uri'
     
-    url = "http://espn.go.com/mens-college-basketball/teams"
+    url = "http://www.cbssports.com/college-basketball/teams/"
     doc = Nokogiri::HTML(open(url))
     puts doc.at_css("title").text
-    doc.css(".mod-content h5").each do |team|
-      school =  team.text
-      team_page = team.css('a').first.attr('href')
-      Team.create_with(team_page: team_page).find_or_create_by(school_name: school)
+    x = 0
+    
+    doc.css("table .data").each do |conference|
+      conference.css('tr').each do |team|
+        if x == 0
+          conf = team.text
+          puts 'Conference = ' + conf
+        else
+
+            school = team.text
+          if !school.blank? 
+            puts school
+            team_page = team.css('a').first.attr('href')
+            puts school + " " + team_page
+          end
+        end
+        x += 1
+      end
+      x = 0
+      #team_page = team.css('a').first.attr('href')
+      #Team.create_with(team_page: team_page).find_or_create_by(school_name: school)
     end
   end
   
