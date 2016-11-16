@@ -6,26 +6,39 @@ namespace :ncaa_teams do
   desc "Tasks to populate database with current NCAA Div 1 teams"
   
   task :fetch_teams => :environment do
+    # This task will completely erase the database of teams and create them
+    # again from scratch using the cbssports list of teams. This is only meant
+    # to be performed once.
+    
     require 'nokogiri'
     require 'open-uri'
     
+    Team.delete_all
     url = "http://www.cbssports.com/college-basketball/teams/"
     doc = Nokogiri::HTML(open(url))
-    puts doc.at_css("title").text
-    x = 0
     
-    doc.css("table .data").each do |conference|
+    x = 0
+    conf = 'blank'
+    doc.css("table .data").first(1).each do |conference|
       conference.css('tr').each do |team|
         if x == 0
           conf = team.text
           puts 'Conference = ' + conf
         else
-
+          if team.at_css('a')
             school = team.text
-          if !school.blank? 
+            team_page = 'http://www.cbssports.com/' + team.css('a').first.attr('href')
+            team = Team.create_with(team_page: team_page, conference: conf).find_or_create_by(school_name: school)
+            url = team_page
+            doc = Nokogiri::HTML(open(url))
+            nickname = doc.css('title').text
+            nickname.slice! school
+            nickname.slice! '- NCAA Basketball - CBSSports.com'
+            nickname.strip!
+            team.nickname = nickname
+            team.conference = conf
+            team.save
             puts school
-            team_page = team.css('a').first.attr('href')
-            puts school + " " + team_page
           end
         end
         x += 1
