@@ -27,3 +27,14 @@
     </tr>
   <% end %>
 </table>
+
+<table class="teams table table-striped table-bordered">
+  <tr>
+    <th data-field="name" data-sortable="true">Name</th>
+  </tr>
+  <% @team.players.each do |player| %>
+    <tr>
+      <td><%= player.name %></td>
+    </tr>
+  <% end %>
+</table>
