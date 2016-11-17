@@ -99,6 +99,10 @@ namespace :ncaa_teams do
     #get box scores for all games up to todays date and fill in the stats for each
     #team. This will overwrite old scores.
     Game.delete_all
+    Team.all.each do |team|
+      team.point_margin = 0
+      team.save
+    end
     
     (Date.new(2016, 11, 11)..Date.yesterday).each do |date|
       urldate = date.strftime("%Y%m%d")
@@ -107,49 +111,30 @@ namespace :ncaa_teams do
       puts doc.css('title')
       doc.css('.scoreBox').each do |game|
         if game.at_css('.gameExtras a')
+          @awayteam = game.css('.awayTeam .teamLocation').text
+          @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
+          if game.at_css('.awayTeam span')
+            @awayteam.slice! game.css('.awayTeam span').text
+          end
+          @awayscore = game.css('.awayTeam .finalScore').text
+          @hometeam = game.css('.homeTeam .teamLocation').text
+          @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
+          if game.at_css('.homeTeam span')
+            @hometeam.slice! game.css('.homeTeam span').text
+          end
+          @homescore = game.css('.homeTeam .finalScore').text
+          @t = Game.new
+          @t.date = date
+          @t.home_team = @hometeam
+          @t.away_team = @awayteam
+          @t.home_score = @homescore
+          @t.away_score = @awayscore
+          @t.overtime = 0
+          Rake::Task['ncaa_teams:create_game'].execute
           if game.css('.gameExtras a').text.include? 'Box Score'
             gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
-            @awayteam = game.css('.awayTeam .teamLocation').text
-            @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
-            if game.at_css('.awayTeam span')
-              @awayteam.slice! game.css('.awayTeam span').text
-            end
-            @awayscore = game.css('.awayTeam .finalScore').text
-            @hometeam = game.css('.homeTeam .teamLocation').text
-            @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
-            if game.at_css('.homeTeam span')
-              @hometeam.slice! game.css('.homeTeam span').text
-            end
-            @homescore = game.css('.homeTeam .finalScore').text
-            @t = Game.new
-            @t.date = date
-            @t.home_team = @hometeam
-            @t.away_team = @awayteam
-            @t.home_score = @homescore
-            @t.away_score = @awayscore
-            @t.overtime = 0
-            Rake::Task['ncaa_teams:create_game'].execute
+            doc = Nokogiri::HTML(open(gameurl))
           else
-            @awayteam = game.css('.awayTeam .teamLocation').text
-            @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
-            if game.at_css('.awayTeam span')
-              @awayteam.slice! game.css('.awayTeam span').text
-            end
-            @awayscore = game.css('.awayTeam .finalScore').text
-            @hometeam = game.css('.homeTeam .teamLocation').text
-            @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
-            if game.at_css('.homeTeam span')
-              @hometeam.slice! game.css('.homeTeam span').text
-            end
-            @homescore = game.css('.homeTeam .finalScore').text
-            @t = Game.new
-            @t.date = date
-            @t.home_team = @hometeam
-            @t.away_team = @awayteam
-            @t.home_score = @homescore
-            @t.away_score = @awayscore
-            @t.overtime = 0
-            Rake::Task['ncaa_teams:create_game'].execute
             
           end
         end
@@ -166,10 +151,10 @@ namespace :ncaa_teams do
       @t.save
      elsif !hometeam.nil?
       @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
-      @t.save
+      #@t.save
      elsif !awayteam.nil?
       @t.teams = awayteam, Team.find_by(school_name: 'dummy')
-      @t.save
+      #@t.save
     end
     if !hometeam.nil? && !awayteam.nil?
       margin = @homescore.to_i - @awayscore.to_i
