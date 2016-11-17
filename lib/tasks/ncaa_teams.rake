@@ -104,7 +104,8 @@ namespace :ncaa_teams do
       team.save
     end
     
-    (Date.new(2016, 11, 11)..Date.yesterday).each do |date|
+    (Date.new(2015, 11, 13)..Date.new(2016, 4, 4)).each do |date|
+    #(Date.new(2016, 11, 11)..Date.yesterday).each do |date|
       urldate = date.strftime("%Y%m%d")
       url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
       doc = Nokogiri::HTML(open(url))
@@ -133,7 +134,7 @@ namespace :ncaa_teams do
           Rake::Task['ncaa_teams:create_game'].execute
           if game.css('.gameExtras a').text.include? 'Box Score'
             gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
-            doc = Nokogiri::HTML(open(gameurl))
+            #doc = Nokogiri::HTML(open(gameurl))
           else
             
           end
