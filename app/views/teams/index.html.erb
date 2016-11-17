@@ -8,11 +8,13 @@
     <th><%= sort_link(@q, :rating, "Rating", default_order: :desc) %></th>
   </tr>
   <% @teams.each do |team| %>
-    <tr>
-      <td><%= team.rank %></td>
-      <td><%= link_to team.school_name, team %></td>
-      <td><%= team.conference %></td>
-      <td><%= team.rating %></td>
-    </tr>
+    <% if team.school_name != 'dummy' %>
+      <tr>
+        <td><%= team.rank %></td>
+        <td><%= link_to team.school_name, team %></td>
+        <td><%= team.conference %></td>
+        <td><%= team.rating %></td>
+      </tr>
+    <% end %>
   <% end %>
 </table>

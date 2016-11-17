@@ -1,6 +1,7 @@
 namespace :ncaa_teams do
   require 'nokogiri'
   require 'open-uri'
+  require 'date'
   #look into using http://www.sports-reference.com/cbb
   
   desc "Tasks to populate database with current NCAA Div 1 teams"
@@ -19,8 +20,8 @@ namespace :ncaa_teams do
     
     x = 0
     conf = 'blank'
-    doc.css("table .data").first(1).each do |conference|
-      conference.css('tr').first(2).each do |team|
+    doc.css("table .data").each do |conference|
+      conference.css('tr').each do |team|
         if x == 0
           conf = team.text
           puts 'Conference = ' + conf
@@ -88,58 +89,176 @@ namespace :ncaa_teams do
       end
       x = 0
     end
-  end
-  
-  task :get_nicknames => :environment do
-    require 'nokogiri'
-    require 'open-uri'
-    Team.all.each do |team|
-      begin
-        url = team.team_page
-        schedule = url.gsub('_/', 'schedule/_/year/2016/')
-        doc = Nokogiri::HTML(open(url))
-        nickname = doc.css(".team-name .link-text").first.text
-        nickname.slice! team.school_name
-        nickname.strip!
-        team.nickname = nickname
-        team.schedule_page = schedule
-        puts schedule
-        team.save
-      rescue
-        team.nickname = "River Hawks"
-        team.schedule_page = "http://espn.go.com/mens-college-basketball/team/schedule/_/id/2349/year/2016/"
-        team.save
-        # puts team.school_name " did not load correctly."
-      end
-    end
+    
+    # create dummy div 2 team
+    Team.create_with(team_page: "", conference: 'n/a', school_name: 'dummy', nickname: '').find_or_create_by(school_name: school)
   end
   
   task :get_schedules => :environment do
-    #Team.all.each do |team|
-    team = Team.first
-    puts team
-    url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/20161111'
-    doc = Nokogiri::HTML(open(url))
-    doc = doc.css(".scoreBox").first(3).each do |game|
-      game = game.css('.gameTracker').attr('href')
-      game = 'http://www.cbssports.com' + game
-      game = Nokogiri::HTML(open(game))
-      x = 0
-      away = ""
-      home = ""
-      game = game.css('.data').each do |gteam|
-        if x == 0
-          away = gteam.css('.title').text
-        else
-          home = gteam.css('.title').text
+    #This task is meant to be run after the teams have been created. It will 
+    #get box scores for all games up to todays date and fill in the stats for each
+    #team. This will overwrite old scores.
+    Game.delete_all
+    
+    (Date.new(2016, 11, 11)..Date.yesterday).each do |date|
+      urldate = date.strftime("%Y%m%d")
+      url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
+      doc = Nokogiri::HTML(open(url))
+      puts doc.css('title')
+      doc.css('.scoreBox').each do |game|
+        if game.at_css('.gameExtras a')
+          if game.css('.gameExtras a').text.include? 'Box Score'
+            gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
+            @awayteam = game.css('.awayTeam .teamLocation').text
+            @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
+            if game.at_css('.awayTeam span')
+              @awayteam.slice! game.css('.awayTeam span').text
+            end
+            @awayscore = game.css('.awayTeam .finalScore').text
+            @hometeam = game.css('.homeTeam .teamLocation').text
+            @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
+            if game.at_css('.homeTeam span')
+              @hometeam.slice! game.css('.homeTeam span').text
+            end
+            @homescore = game.css('.homeTeam .finalScore').text
+            @t = Game.new
+            @t.date = date
+            @t.home_team = @hometeam
+            @t.away_team = @awayteam
+            @t.home_score = @homescore
+            @t.away_score = @awayscore
+            @t.overtime = 0
+            Rake::Task['ncaa_teams:create_game'].execute
+          else
+            @awayteam = game.css('.awayTeam .teamLocation').text
+            @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
+            if game.at_css('.awayTeam span')
+              @awayteam.slice! game.css('.awayTeam span').text
+            end
+            @awayscore = game.css('.awayTeam .finalScore').text
+            @hometeam = game.css('.homeTeam .teamLocation').text
+            @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
+            if game.at_css('.homeTeam span')
+              @hometeam.slice! game.css('.homeTeam span').text
+            end
+            @homescore = game.css('.homeTeam .finalScore').text
+            @t = Game.new
+            @t.date = date
+            @t.home_team = @hometeam
+            @t.away_team = @awayteam
+            @t.home_score = @homescore
+            @t.away_score = @awayscore
+            @t.overtime = 0
+            Rake::Task['ncaa_teams:create_game'].execute
+            
+          end
         end
-        x = x + 1
       end
-      x = 0
-    #   headless.start
-    #   browser = Watir::Browser.new
-    puts away + ' @ ' + home
-    #  headless.destroy
     end
   end
-end
+  
+  task :create_game => :environment do
+    hometeam = Team.find_by(school_name: @hometeam)
+    awayteam = Team.find_by(school_name: @awayteam)
+    if !hometeam.nil? && !awayteam.nil?
+      puts @t
+      @t.teams = hometeam, awayteam
+      @t.save
+     elsif !hometeam.nil?
+      @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
+      @t.save
+     elsif !awayteam.nil?
+      @t.teams = awayteam, Team.find_by(school_name: 'dummy')
+      @t.save
+    end
+    if !hometeam.nil? && !awayteam.nil?
+      margin = @homescore.to_i - @awayscore.to_i
+      hometeam.point_margin ||= 0
+      awayteam.point_margin ||= 0
+      hometeam.point_margin += margin
+      awayteam.point_margin -= margin
+      hometeam.wins ||= 0
+      hometeam.losses ||= 0
+      hometeam.conf_wins ||= 0
+      hometeam.conf_losses ||= 0
+      awayteam.wins ||= 0
+      awayteam.losses ||= 0
+      awayteam.conf_wins ||= 0
+      awayteam.conf_losses ||= 0
+      if margin > 0 
+        hometeam.wins += 1
+        awayteam.losses += 1
+      else
+        awayteam.wins += 1
+        hometeam.losses += 1
+      end
+      if hometeam.conference == awayteam.conference
+        if margin > 0 
+          hometeam.conf_wins += 1
+          awayteam.conf_losses += 1
+        else
+          awayteam.conf_wins += 1
+          hometeam.conf_losses += 1
+        end
+      end
+      hometeam.save
+      awayteam.save
+      puts hometeam.nickname + " has a point margin of #{hometeam.point_margin}"
+    end
+  end
+  #   team = Team.first
+  #   puts team
+  #   url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/20161111'
+  #   doc = Nokogiri::HTML(open(url))
+  #   doc = doc.css(".scoreBox").first(3).each do |game|
+  #     game = game.css('.gameTracker').attr('href')
+  #     game = 'http://www.cbssports.com' + game
+  #     game = Nokogiri::HTML(open(game))
+  #     x = 0
+  #     away = ""
+  #     home = ""
+  #     game = game.css('.data').each do |gteam|
+  #       if x == 0
+  #         away = gteam.css('.title').text
+  #       else
+  #         home = gteam.css('.title').text
+  #       end
+  #       x = x + 1
+  #     end
+  #     x = 0
+  #   #   headless.start
+  #   #   browser = Watir::Browser.new
+  #   puts away + ' @ ' + home
+  #   #  headless.destroy
+  #   end
+  
+end  
+  
+######################### OLD WORK BELOW #######################################
+
+    # This task has been depricated
+  # task :get_nicknames => :environment do
+  #   require 'nokogiri'
+  #   require 'open-uri'
+  #   Team.all.each do |team|
+  #     begin
+  #       url = team.team_page
+  #       schedule = url.gsub('_/', 'schedule/_/year/2016/')
+  #       doc = Nokogiri::HTML(open(url))
+  #       nickname = doc.css(".team-name .link-text").first.text
+  #       nickname.slice! team.school_name
+  #       nickname.strip!
+  #       team.nickname = nickname
+  #       team.schedule_page = schedule
+  #       puts schedule
+  #       team.save
+  #     rescue
+  #       team.nickname = "River Hawks"
+  #       team.schedule_page = "http://espn.go.com/mens-college-basketball/team/schedule/_/id/2349/year/2016/"
+  #       team.save
+  #       # puts team.school_name " did not load correctly."
+  #     end
+  #   end
+  # end
+  
+
