@@ -100,15 +100,13 @@ namespace :ncaa_teams do
     #team. This will overwrite old scores.
     Game.delete_all
     Team.all.each do |team|
-      if team
-        team.point_margin = 0
-        team.wins = 0
-        team.losses = 0
-        team.conf_wins = 0
-        team.conf_losses = 0
-        team.tempo = 69.6
-        team.save
-      end
+      team.point_margin = 0
+      team.wins = 0
+      team.losses = 0
+      team.conf_wins = 0
+      team.conf_losses = 0
+      team.tempo = 69.6
+      team.save
     end
     
     #Run with last year's games first to get starting ratings.
