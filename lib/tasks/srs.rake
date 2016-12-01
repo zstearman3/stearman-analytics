@@ -133,6 +133,8 @@ namespace :srs do
     Team.all.each do |team|
       if team.games.count != 0
         team.rating = (team.point_margin/ (4 * team.games.count))
+        team.ortg = 101
+        team.drtg = 101
         team.save
       else team.rating = 0
       end
@@ -146,23 +148,33 @@ namespace :srs do
         
           if team.school_name = game[:home_team]
             opponent = game[:away_team]
+            teamscore = game.home_score
+            opponentscore = game.away_score
           else
             opponent = game[:home_team]
+            teamscore = game.away_score
+            opponentscore = game.home_score
           end
           opp_team = Team.find_by(school_name: opponent)
           if !opp_team.nil?
             opp_rating += opp_team.rating
             opp_tempo = opp_team.tempo
+            opp_ortg = opp_team.ortg
+            opp_drtg = opp_team.drtg
             if game.posessions
-              current_team.tempo = current_team.tempo - ((((current_team.tempo + opp_tempo)/2) - game.posessions)/4)
+              current_team.tempo = current_team.tempo - ((((current_team.tempo + opp_tempo)/2.00) - game.posessions)/4.00)
               current_team.tempo = current_team.tempo.round(2)
+              current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
+              current_team.ortg = current_team.ortg.round(2)
+              current_team.drtg = current_team.drtg - ((((current_team.drtg + opp_ortg)/2) - (opponentscore * (100.00/game.posessions)))/6)
+              current_team.drtg = current_team.drtg.round(2)
               current_team.save
             end
           end
         end
         if team.games.count != 0
           oldrating = current_team.rating
-          current_team.rating = (team.point_margin/team.games.count) + ((1.0/(team.games.count)) * opp_rating) + 1.75
+          current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
           current_team.rating = current_team.rating.round(1)
           rank = Team.where("rating > ?", current_team.rating).count + 1
           current_team.rank = rank
