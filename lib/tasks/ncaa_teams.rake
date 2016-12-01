@@ -101,11 +101,17 @@ namespace :ncaa_teams do
     Game.delete_all
     Team.all.each do |team|
       team.point_margin = 0
+      team.wins = 0
+      team.losses = 0
+      team.conf_wins = 0
+      team.conf_losses = 0
+      team.tempo = 69.6
       team.save
     end
     
-    (Date.new(2015, 11, 13)..Date.new(2016, 4, 4)).each do |date|
-    #(Date.new(2016, 11, 11)..Date.yesterday).each do |date|
+    #Run with last year's games first to get starting ratings.
+    #(Date.new(2015, 11, 13)..Date.new(2016, 4, 4)).each do |date|
+    (Date.new(2016, 11, 11)..Date.yesterday).each do |date|
       urldate = date.strftime("%Y%m%d")
       url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
       doc = Nokogiri::HTML(open(url))
@@ -131,12 +137,45 @@ namespace :ncaa_teams do
           @t.home_score = @homescore
           @t.away_score = @awayscore
           @t.overtime = 0
-          Rake::Task['ncaa_teams:create_game'].execute
           if game.css('.gameExtras a').text.include? 'Box Score'
+            hometeam = Team.find_by(school_name: @hometeam)
+            awayteam = Team.find_by(school_name: @awayteam)
             gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
-            #doc = Nokogiri::HTML(open(gameurl))
+            doc = Nokogiri::HTML(open(gameurl))
+            fga = 0
+            tov = 0
+            fta = 0
+            oreb = 0
+            doc.css('.data #totals').each do |totals|
+              shots = totals.xpath('./td[3]').text
+              freethrows = totals.xpath('./td[5]').text
+              turnovers = totals.xpath('./td[9]').text.to_i
+              offreb = totals.xpath('./td[6]').text.to_i
+              fga += shots.partition('-').last.to_i
+              fta += freethrows.partition('-').last.to_i
+              tov += turnovers
+              oreb += offreb
+              totals.remove
+            end
+            poss = 0.48 * (fga + tov + (0.44 * fta) - oreb)
+            @t.posessions =  poss
+            Rake::Task['ncaa_teams:create_game'].execute
+            doc.css('.data #head, .data #pct, .data .title').each do |trash|
+              trash.remove
+            end
+            doc.css('.data tr').each do |player|
+              # name = player.css('a').text
+              # puts player
+            end
           else
-            
+            hometeam = Team.find_by(school_name: @hometeam)
+            awayteam = Team.find_by(school_name: @awayteam)
+            if hometeam && awayteam
+              puts hometeam.school_name
+              poss = (hometeam.tempo + awayteam.tempo)/2
+              @t.posessions = poss
+              Rake::Task['ncaa_teams:create_game'].execute
+            end
           end
         end
       end
@@ -147,7 +186,6 @@ namespace :ncaa_teams do
     hometeam = Team.find_by(school_name: @hometeam)
     awayteam = Team.find_by(school_name: @awayteam)
     if !hometeam.nil? && !awayteam.nil?
-      puts @t
       @t.teams = hometeam, awayteam
       @t.save
      elsif !hometeam.nil?
@@ -189,7 +227,6 @@ namespace :ncaa_teams do
       end
       hometeam.save
       awayteam.save
-      puts hometeam.nickname + " has a point margin of #{hometeam.point_margin}"
     end
   end
   #   team = Team.first

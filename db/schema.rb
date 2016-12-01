@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115213542) do
+ActiveRecord::Schema.define(version: 20161130203816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20161115213542) do
     t.string   "away_team"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "posessions"
   end
 
   create_table "games_teams", id: false, force: :cascade do |t|
@@ -32,6 +33,19 @@ ActiveRecord::Schema.define(version: 20161115213542) do
     t.integer "team_id"
     t.index ["game_id"], name: "index_games_teams_on_game_id", using: :btree
     t.index ["team_id"], name: "index_games_teams_on_team_id", using: :btree
+  end
+
+  create_table "player_games", force: :cascade do |t|
+    t.datetime "date"
+    t.integer  "points"
+    t.integer  "rebounds"
+    t.integer  "assists"
+    t.integer  "player_id"
+    t.integer  "game_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_player_games_on_game_id", using: :btree
+    t.index ["player_id"], name: "index_player_games_on_player_id", using: :btree
   end
 
   create_table "players", force: :cascade do |t|
@@ -64,6 +78,11 @@ ActiveRecord::Schema.define(version: 20161115213542) do
     t.integer  "losses"
     t.integer  "conf_wins"
     t.integer  "conf_losses"
+    t.decimal  "variance"
+    t.decimal  "homeadv"
+    t.decimal  "awayadv"
+    t.decimal  "initortg"
+    t.decimal  "initdrtg"
     t.index ["school_name"], name: "index_teams_on_school_name", unique: true, using: :btree
   end
 
@@ -79,5 +98,7 @@ ActiveRecord::Schema.define(version: 20161115213542) do
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
+  add_foreign_key "player_games", "games"
+  add_foreign_key "player_games", "players"
   add_foreign_key "players", "teams"
 end
