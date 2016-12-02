@@ -9,7 +9,7 @@ namespace :srs do
 
     #Run with last year's games first to get starting ratings.
     #(Date.new(2015, 11, 13)..Date.new(2016, 4, 4)).each do |date|
-    startdate = Game.last.date.to_date # + 1.day
+    startdate = Game.last.date.to_date + 1.day
     (startdate..Date.yesterday).each do |date|
       urldate = date.strftime("%Y%m%d")
       url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
@@ -139,14 +139,14 @@ namespace :srs do
       else team.rating = 0
       end
     end
-    3.times do
+    5.times do
     error = 0
       Team.all.each do |team|
         current_team = Team.find_by(school_name: team.school_name)
         opp_rating = 0
         team.games.each do |game|
         
-          if team.school_name = game[:home_team]
+          if team.school_name == game[:home_team]
             opponent = game[:away_team]
             teamscore = game.home_score
             opponentscore = game.away_score
@@ -162,6 +162,17 @@ namespace :srs do
             opp_ortg = opp_team.ortg
             opp_drtg = opp_team.drtg
             if game.posessions
+              # if current_team.school_name == "Alabama A&M"
+              #   puts game[:home_team]
+              #   puts game[:away_team]
+              #   puts current_team.ortg
+              #   puts current_team.drtg
+              #   puts opp_ortg
+              #   puts opp_drtg
+              #   puts teamscore
+              #   puts opponentscore
+              #   puts game.posessions
+              # end
               current_team.tempo = current_team.tempo - ((((current_team.tempo + opp_tempo)/2.00) - game.posessions)/4.00)
               current_team.tempo = current_team.tempo.round(2)
               current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)

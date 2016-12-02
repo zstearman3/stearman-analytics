@@ -6,6 +6,8 @@
     <th><%= sort_link(@q, :school_name, "School") %></th>
     <th><%= sort_link(@q, :conference, "Conference") %></th>
     <th><%= sort_link(@q, :rating, "Rating", default_order: :desc) %></th>
+    <th><%= sort_link(@q, :ortg, "ORtg", default_order: :desc) %></th>
+    <th><%= sort_link(@q, :drtg, "DRtg", default_order: :desc) %></th>
     <th><%= sort_link(@q, :tempo, "Tempo") %></th>
   </tr>
   <% @teams.each do |team| %>
@@ -15,6 +17,8 @@
         <td><%= link_to team.school_name, team %></td>
         <td><%= team.conference %></td>
         <td><%= team.rating %></td>
+        <td><%= team.ortg %></td>
+        <td><%= team.drtg %></td>
         <td><%= team.tempo %></td>
       </tr>
     <% end %>
