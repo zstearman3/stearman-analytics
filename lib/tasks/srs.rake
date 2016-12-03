@@ -162,18 +162,18 @@ namespace :srs do
             opp_ortg = opp_team.ortg
             opp_drtg = opp_team.drtg
             if game.posessions
-              if current_team.school_name == "Alabama A&M"
-                puts game[:home_team]
-                puts game[:away_team]
-                puts current_team.ortg
-                puts current_team.drtg
-                puts opp_ortg
-                puts opp_drtg
-                puts teamscore
-                puts opponentscore
-                puts game.posessions
-              end
-              current_team.tempo = current_team.tempo - ((((current_team.tempo + opp_tempo)/2.00) - game.posessions)/4.00)
+              # if current_team.school_name == "Alabama A&M"
+              #   puts game[:home_team]
+              #   puts game[:away_team]
+              #   puts current_team.ortg
+              #   puts current_team.drtg
+              #   puts opp_ortg
+              #   puts opp_drtg
+              #   puts teamscore
+              #   puts opponentscore
+              #   puts game.posessions
+              # end
+              current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 70.0)))
               current_team.tempo = current_team.tempo.round(2)
               current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ 102.00)))
               #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
