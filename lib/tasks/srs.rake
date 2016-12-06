@@ -176,15 +176,17 @@ namespace :srs do
               # end
               current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 70.0)))
               current_team.tempo = current_team.tempo.round(2)
+              
+              # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
+              # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
+              
               if team.school_name == game[:home_team]
                 current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
-                #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
                 current_team.ortg = current_team.ortg.round(2)
                 current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
                 current_team.drtg = current_team.drtg.round(2)
               else
                 current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-                #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
                 current_team.ortg = current_team.ortg.round(2)
                 current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
                 current_team.drtg = current_team.drtg.round(2)
