@@ -56,7 +56,7 @@ namespace :srs do
               oreb += offreb
               totals.remove
             end
-            poss = 0.48 * (fga + tov + (0.44 * fta) - oreb)
+            poss = 0.48 * (fga + tov + (0.475 * fta) - oreb)
             @t.posessions =  poss
             Rake::Task['ncaa_teams:create_game'].execute
             doc.css('.data #head, .data #pct, .data .title').each do |trash|
@@ -71,7 +71,7 @@ namespace :srs do
             awayteam = Team.find_by(school_name: @awayteam)
             if hometeam && awayteam
               puts hometeam.school_name
-              poss = (hometeam.tempo + awayteam.tempo)/2
+              poss = (hometeam.tempo * awayteam.tempo)/69.0
               @t.posessions = poss
               Rake::Task['ncaa_teams:create_game'].execute
             end
@@ -135,6 +135,7 @@ namespace :srs do
         team.rating = (team.point_margin/ (4 * team.games.count))
         team.ortg = 102
         team.drtg = 102
+        team.tempo = 70
         team.save
       else team.rating = 0
       end
@@ -175,11 +176,19 @@ namespace :srs do
               # end
               current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 70.0)))
               current_team.tempo = current_team.tempo.round(2)
-              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ 102.00)))
-              #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
-              current_team.ortg = current_team.ortg.round(2)
-              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ 102.00)))
-              current_team.drtg = current_team.drtg.round(2)
+              if team.school_name == game[:home_team]
+                current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
+                #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
+                current_team.ortg = current_team.ortg.round(2)
+                current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
+                current_team.drtg = current_team.drtg.round(2)
+              else
+                current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
+                #current_team.ortg = current_team.ortg - ((((current_team.ortg + opp_drtg)/2) - (teamscore * (100.00/game.posessions)))/6)
+                current_team.ortg = current_team.ortg.round(2)
+                current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
+                current_team.drtg = current_team.drtg.round(2)
+              end
               current_team.save
             end
           end

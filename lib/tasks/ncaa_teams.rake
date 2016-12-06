@@ -157,7 +157,7 @@ namespace :ncaa_teams do
               oreb += offreb
               totals.remove
             end
-            poss = 0.48 * (fga + tov + (0.44 * fta) - oreb)
+            poss = 0.48 * (fga + tov + (0.475 * fta) - oreb)
             @t.posessions =  poss
             Rake::Task['ncaa_teams:create_game'].execute
             doc.css('.data #head, .data #pct, .data .title').each do |trash|
@@ -172,7 +172,7 @@ namespace :ncaa_teams do
             awayteam = Team.find_by(school_name: @awayteam)
             if hometeam && awayteam
               puts hometeam.school_name
-              poss = (hometeam.tempo + awayteam.tempo)/2
+              poss = (hometeam.tempo * awayteam.tempo)/69.0
               @t.posessions = poss
               Rake::Task['ncaa_teams:create_game'].execute
             end
