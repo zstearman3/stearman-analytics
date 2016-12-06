@@ -138,7 +138,7 @@ namespace :srs do
           @t.teams = awayteam, Team.find_by(school_name: 'dummy')
           #@t.save
         end
-        if hometeam && !awayteam
+        if hometeam && awayteam
           hometeam.save
           awayteam.save
          # do something with your life
