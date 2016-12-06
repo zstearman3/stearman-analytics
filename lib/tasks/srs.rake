@@ -79,6 +79,72 @@ namespace :srs do
         end
       end
     end
+    existing = Game.find_by(date: Date.today)
+    urldate = Date.today.strftime("%Y%m%d")
+    url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
+    doc = Nokogiri::HTML(open(url))
+    puts doc.css('title')
+    doc.css('.scoreBox').each do |game|
+      @awayteam = game.css('.awayTeam .teamLocation').text
+      @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
+      if game.at_css('.awayTeam span')
+        @awayteam.slice! game.css('.awayTeam span').text
+      end
+      @hometeam = game.css('.homeTeam .teamLocation').text
+      @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
+      if game.at_css('.homeTeam span')
+        @hometeam.slice! game.css('.homeTeam span').text
+      end
+      if existing 
+        Game.where(:date => Date.today).find_each do |existinggame|
+          if existinggame.home_team == @hometeam || existinggame.away_team == @awayteam
+            overunder = game.at_css('.awayTeam .gameOdds').text
+            overunder.slice! 'O/U'
+            overunder.strip!
+            puts overunder
+            existinggame.moneyline = overunder.to_f
+            existinggame.spread = game.css('.homeTeam .gameOdds').text.to_f
+            existinggame.home_score = ""
+            existinggame.away_score = ""
+            puts existinggame.spread
+            hometeam = Team.find_by(school_name: @hometeam)
+            awayteam = Team.find_by(school_name: @awayteam)      
+            homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+            awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+            existinggame.homecalc = homescore.round(0)
+            existinggame.awaycalc = awayscore.round(0)
+            puts existinggame.homecalc.to_s + "-" + existinggame.awaycalc.to_s
+            existinggame.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
+            existinggame.mldiff = (existinggame.awaycalc + existinggame.homecalc) - existinggame.moneyline
+            existinggame.save
+            puts @hometeam
+          end
+        end
+      else
+        @t = Game.new
+        @t.date = Date.today
+        @t.home_team = @hometeam
+        @t.away_team = @awayteam
+        puts @t
+        hometeam = Team.find_by(school_name: @hometeam)
+        awayteam = Team.find_by(school_name: @awayteam)
+        if hometeam && awayteam
+          @t.teams = hometeam, awayteam
+          @t.save
+         elsif hometeam
+          @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
+          #@t.save
+         elsif awayteam
+          @t.teams = awayteam, Team.find_by(school_name: 'dummy')
+          #@t.save
+        end
+        if hometeam && !awayteam
+          hometeam.save
+          awayteam.save
+         # do something with your life
+        end
+      end
+    end
   end
   
   task :create_game => :environment do

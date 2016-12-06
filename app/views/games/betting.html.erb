@@ -1,0 +1,49 @@
+<div class="col-sm-12">
+  <table class="games table table-striped table-bordered" >
+    <tr>
+      <th data-field="date" data-sortable="true"><%= "Matchup" %></th>
+      <th data-field="opponent" data-sortable="true"><%= "Line" %></th>
+      <th data-field="opponent" data-sortable="true"><%= "O/U" %></th>
+      <th data-field="opponent" data-sortable="true"><%= "Prediciton" %></th>
+      <th data-field="opponent" data-sortable="true"><%= "Line Difference" %></th>
+      <th data-field="opponent" data-sortable="true"><%= "O/U Difference" %></th>
+    </tr>
+    <% Game.where(:date => Date.today).find_each do |game| %>
+      <% result = "L" %>
+      <tr>
+        <td><%= game.away_team + " @ " + game.home_team %></td>
+        <td>
+        <% if game.spread != 0 %>
+          <%= game.spread %>
+        <% else %>
+          -
+        <% end %>  
+        </td>
+        <td>
+        <% if game.spread != 0 %>
+          <%= game.moneyline %>
+        <% else %>
+          -
+        <% end %>  
+        </td>
+        
+        <td>
+        <%= game.away_team + " " + game.awaycalc.to_i.to_s + " - " +
+            game.home_team + " " + game.homecalc.to_i.to_s %></td>
+        <td>
+        <% if game.spread != 0 %>
+          <%= game.spreaddiff %>
+        <% else %>
+          -
+        <% end %>
+        </td>
+        <td>
+        <% if game.spread != 0 %>
+          <%= game.mldiff %>
+        <% else %>
+          -
+        <% end %>
+        </td>
+    <% end %>
+  </table>
+</div>

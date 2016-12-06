@@ -15,15 +15,23 @@
         <td><%=  game[:date].strftime("%m/%d/%Y") %></td>
         <% if @team.school_name == game[:home_team] %>
           <td><%= link_to game[:away_team], "/teams/#{game[:away_team]}" %></td>
-          <% result = "W" if game.home_score > game.away_score %>
+          <% if game[:date] != Date.today %>
+            <% result = "W" if game.home_score > game.away_score %>
+          <% end %>
         <% else %>
           <td><%= link_to "@" + game[:home_team], "/teams/#{game[:home_team]}"%></td>
-          <% result = "W" if game.away_score > game.home_score %>
+          <% if game[:date] != Date.today %>
+            <% result = "W" if game.away_score > game.home_score %>
+          <% end %>
         <% end %>
-        <% if game[:overtime] != 0 %>
-          <td><%= link_to result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s + " " +  game[:overtime].to_s + "OT", game %></td>
+        <% if game[:date] != Date.today %>
+          <% if game[:overtime] != 0 %>
+            <td><%= link_to result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s + " " +  game[:overtime].to_s + "OT", game %></td>
+          <% else %>
+            <td><%= link_to result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s, game %></td>
+          <% end %>
         <% else %>
-          <td><%= link_to result + ", " + game[:home_score].to_s + "-" + game[:away_score].to_s, game %></td>
+          <td><%= link_to "Preview", game %></td>
         <% end %>
       </tr>
     <% end %>
