@@ -200,15 +200,103 @@ namespace :srs do
           @t.teams = awayteam, Team.find_by(school_name: 'dummy')
           @t.save
         end
-    #     if hometeam && awayteam
-    #       hometeam.save
-    #       awayteam.save
-    #     # do something with your life
-    #     end
       end
     end
   end
-
+  
+  
+  task :simple_rating => :environment do
+    5.times do
+    error = 0
+      Team.all.each do |team|
+        current_team = Team.find_by(school_name: team.school_name)
+        team.games.each do |game|
+          if team.school_name == game[:home_team]
+            opponent = game[:away_team]
+            teamscore = game.home_score
+            opponentscore = game.away_score
+          else
+            opponent = game[:home_team]
+            teamscore = game.away_score
+            opponentscore = game.home_score
+          end
+          opp_team = Team.find_by(school_name: opponent)
+          if opp_team && game.posessions
+            opp_rating = opp_team.rating
+            opp_tempo = opp_team.tempo
+            opp_ortg = opp_team.ortg
+            opp_drtg = opp_team.drtg
+            # 69.0 should be tuned to a better number in the future. 0.15 is a multipier
+            # that should be tuned as well when more info is available.
+            current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 69.0)))
+            current_team.tempo = current_team.tempo.round(2)
+            
+            # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
+            # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
+            
+            if team.school_name == game[:home_team]
+              puts current_team.school_name
+              puts current_team.ortg
+              puts teamscore
+              puts game.posessions
+              puts opp_drtg
+              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
+              current_team.ortg = current_team.ortg.round(2)
+              # current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
+              # current_team.drtg = current_team.drtg.round(2)
+            else
+            #   current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
+            #   current_team.ortg = current_team.ortg.round(2)
+            #   current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
+            #   current_team.drtg = current_team.drtg.round(2)
+            end
+            current_team.save
+          end
+        end
+        
+        # All games have been collected now. Still, each team will iterate through
+        # this section 5 times. 
+        if team.games.count != 0
+          # oldrating = current_team.rating
+          # current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
+          # current_team.rating = current_team.rating.round(1)
+          # error = error + (current_team.rating - oldrating).abs
+          # error = error.round(1)
+        end
+      end
+      puts error
+    end
+    # We are now outside of the 5.times loop, so this section is only performed once at the end.
+    Team.all.each do |team|
+      current_team = Team.find_by(school_name: team.school_name)
+    #   rank = Team.where("rating > ?", current_team.rating).count + 1
+    #   current_team.rank = rank
+    #   current_team.save
+      
+    #   # determine the record of the team
+    #   team.wins = 0
+    #   team.losses = 0
+    #   team.conf_wins = 0
+    #   team.conf_losses = 0
+      
+    #   team.games.each do |game|
+    #     if team.school_name = game.home_team
+    #       if game.home_score > game.away_score
+    #         team.wins += 1
+    #       else
+    #         team.losses += 1
+    #       end
+    #     else
+          
+    #     end
+    #   end
+    end
+  end
+  
+  
+  
+  # OLD TASKS SORED HERE DURING REFACTOR
+  
   task :create_game => :environment do
     hometeam = Team.find_by(school_name: @hometeam)
     awayteam = Team.find_by(school_name: @awayteam)
@@ -256,98 +344,6 @@ namespace :srs do
       awayteam.save
     end
   end
-  
-  task :simple_rating => :environment do
-    Team.all.each do |team|
-      if team.games.count != 0
-        team.rating = (team.point_margin/ (4 * team.games.count))
-        team.ortg = 102
-        team.drtg = 102
-        team.tempo = 70
-        team.save
-      else team.rating = 0
-      end
-    end
-    5.times do
-    error = 0
-      Team.all.each do |team|
-        current_team = Team.find_by(school_name: team.school_name)
-        opp_rating = 0
-        team.games.each do |game|
-        
-          if team.school_name == game[:home_team]
-            opponent = game[:away_team]
-            teamscore = game.home_score
-            opponentscore = game.away_score
-          else
-            opponent = game[:home_team]
-            teamscore = game.away_score
-            opponentscore = game.home_score
-          end
-          opp_team = Team.find_by(school_name: opponent)
-          if !opp_team.nil?
-            opp_rating += opp_team.rating
-            opp_tempo = opp_team.tempo
-            opp_ortg = opp_team.ortg
-            opp_drtg = opp_team.drtg
-            if game.posessions
-              # if current_team.school_name == "Alabama A&M"
-              #   puts game[:home_team]
-              #   puts game[:away_team]
-              #   puts current_team.ortg
-              #   puts current_team.drtg
-              #   puts opp_ortg
-              #   puts opp_drtg
-              #   puts teamscore
-              #   puts opponentscore
-              #   puts game.posessions
-              # end
-              current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 70.0)))
-              current_team.tempo = current_team.tempo.round(2)
-              
-              # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
-              # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
-              
-              if team.school_name == game[:home_team]
-                current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
-                current_team.ortg = current_team.ortg.round(2)
-                current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
-                current_team.drtg = current_team.drtg.round(2)
-              else
-                current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-                current_team.ortg = current_team.ortg.round(2)
-                current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
-                current_team.drtg = current_team.drtg.round(2)
-              end
-              current_team.save
-            end
-          end
-        end
-        if team.games.count != 0
-          oldrating = current_team.rating
-          current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
-          current_team.rating = current_team.rating.round(1)
-          rank = Team.where("rating > ?", current_team.rating).count + 1
-          current_team.rank = rank
-          current_team.save
-          error = error + (current_team.rating - oldrating).abs
-          error = error.round(1)
-        end
-      end
-      puts Team.first.rating
-      puts error
-    end
-    Team.all.each do |team|
-      current_team = Team.find_by(school_name: team.school_name)
-      rank = Team.where("rating > ?", current_team.rating).count + 1
-      current_team.rank = rank
-      current_team.save
-    end
-  end
-  
-  
-  
-  # OLD TASKS SORED HERE DURING REFACTOR
   
   task :old_update_schedules => :environment do
     #This task is meant to be run after the teams have been created. It will 
