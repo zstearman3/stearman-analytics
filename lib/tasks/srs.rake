@@ -273,15 +273,15 @@ namespace :srs do
       team.conf_losses = 0
       
       team.games.each do |game|
-      #   if team.school_name = othergame.home_team
-      #     if othergame.home_score > othergame.away_score
-      #       team.wins += 1
-      #     else
-      #       team.losses += 1
-      #     end
-      #   else
+        if team.school_name == game.home_team
+          if game.home_score > game.away_score
+            team.wins += 1
+          else
+            team.losses += 1
+          end
+          else
           
-      #   end
+          end
       end
       team.save
     end
