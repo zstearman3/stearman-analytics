@@ -242,13 +242,13 @@ namespace :srs do
               puts opp_drtg
               current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
               current_team.ortg = current_team.ortg.round(2)
-              # current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
-              # current_team.drtg = current_team.drtg.round(2)
+              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
+              current_team.drtg = current_team.drtg.round(2)
             else
-            #   current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-            #   current_team.ortg = current_team.ortg.round(2)
-            #   current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
-            #   current_team.drtg = current_team.drtg.round(2)
+              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
+              current_team.ortg = current_team.ortg.round(2)
+              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
+              current_team.drtg = current_team.drtg.round(2)
             end
             current_team.save
           end
@@ -257,11 +257,11 @@ namespace :srs do
         # All games have been collected now. Still, each team will iterate through
         # this section 5 times. 
         if team.games.count != 0
-          # oldrating = current_team.rating
-          # current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
-          # current_team.rating = current_team.rating.round(1)
-          # error = error + (current_team.rating - oldrating).abs
-          # error = error.round(1)
+          oldrating = current_team.rating
+          current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
+          current_team.rating = current_team.rating.round(1)
+          error = error + (current_team.rating - oldrating).abs
+          error = error.round(1)
         end
       end
       puts error
@@ -269,27 +269,27 @@ namespace :srs do
     # We are now outside of the 5.times loop, so this section is only performed once at the end.
     Team.all.each do |team|
       current_team = Team.find_by(school_name: team.school_name)
-    #   rank = Team.where("rating > ?", current_team.rating).count + 1
-    #   current_team.rank = rank
-    #   current_team.save
+      rank = Team.where("rating > ?", current_team.rating).count + 1
+      current_team.rank = rank
+      current_team.save
       
-    #   # determine the record of the team
-    #   team.wins = 0
-    #   team.losses = 0
-    #   team.conf_wins = 0
-    #   team.conf_losses = 0
+      # determine the record of the team
+      team.wins = 0
+      team.losses = 0
+      team.conf_wins = 0
+      team.conf_losses = 0
       
-    #   team.games.each do |game|
-    #     if team.school_name = game.home_team
-    #       if game.home_score > game.away_score
-    #         team.wins += 1
-    #       else
-    #         team.losses += 1
-    #       end
-    #     else
+      team.games.each do |game|
+        if team.school_name = game.home_team
+          if game.home_score > game.away_score
+            team.wins += 1
+          else
+            team.losses += 1
+          end
+        else
           
-    #     end
-    #   end
+        end
+      end
     end
   end
   
