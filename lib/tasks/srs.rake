@@ -236,15 +236,15 @@ namespace :srs do
             
             if current_team.school_name == game[:home_team]
               puts current_team.school_name
-              # current_team.ortg = current_team.ortg# + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
-              # current_team.ortg = current_team.ortg.round(2)
-              # current_team.drtg = current_team.drtg# + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
-              # current_team.drtg = current_team.drtg.round(2)
+              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
+              current_team.ortg = current_team.ortg.round(2)
+              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
+              current_team.drtg = current_team.drtg.round(2)
             else
-              # current_team.ortg = current_team.ortg# + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-              # current_team.ortg = current_team.ortg.round(2)
-              # current_team.drtg = current_team.drtg #+ (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
-              # current_team.drtg = current_team.drtg.round(2)
+              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
+              current_team.ortg = current_team.ortg.round(2)
+              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
+              current_team.drtg = current_team.drtg.round(2)
             end
             current_team.save
           end
