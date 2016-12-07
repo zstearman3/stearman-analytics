@@ -287,7 +287,7 @@ namespace :srs do
           end
         end
       end
+      team.save
     end
-    team.save
   end
 end
