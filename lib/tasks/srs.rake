@@ -148,7 +148,7 @@ namespace :srs do
                     oldgame.posessions = poss
                     oldgame.overtime = @overtime  
                     if oldgame.home_team && oldgame.away_team
-                      poss = (hometeam.tempo * awayteam.tempo)/69.0
+                      poss = (oldgame.hometeam.tempo * oldgame.awayteam.tempo)/69.0
                       puts oldgame.home_team
                       oldgame.save
                     end
