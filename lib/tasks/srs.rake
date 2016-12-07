@@ -124,7 +124,90 @@ namespace :srs do
     # closes each day so this will only run once after all games have been updated.
   end
 
-
+  
+  task :betting_predictions => :environment do
+    # This task will only look at the CBS Sports games for Today in stystem time.
+    # Will try to get game lines for these games, make predictions, and compare
+    # predicted score to Vegas score. Maybe I should extend this to future games
+    # as well?
+    
+    urldate = Date.today.strftime("%Y%m%d")
+    url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
+    doc = Nokogiri::HTML(open(url))
+    puts doc.css('title')
+    doc.css('.scoreBox').each do |game|
+      @awayteam = game.css('.awayTeam .teamLocation').text
+      @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
+      if game.at_css('.awayTeam span')
+        @awayteam.slice! game.css('.awayTeam span').text
+      end
+      @hometeam = game.css('.homeTeam .teamLocation').text
+      @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
+      if game.at_css('.homeTeam span')
+        @hometeam.slice! game.css('.homeTeam span').text
+      end
+      hometeam = Team.find_by(school_name: @hometeam)
+      awayteam = Team.find_by(school_name: @awayteam) 
+      @overunder = game.css('.awayTeam .gameOdds').text
+      @overunder.slice! 'O/U'
+      @overunder.strip!.to_f
+      @spread = game.css('.homeTeam .gameOdds').text.to_f
+      existing = nil
+      Game.where(:date => Date.today).find_each do |oldgame|
+        if oldgame.home_team == @hometeam || oldgame.away_team == @awayteam
+          # determine if the game has already been created in the datatbase
+          existing = true
+        end
+      end
+      if existing
+        # if the game has been created, find it, and update it
+        Game.where(:date => Date.today).find_each do |existinggame|
+          if existinggame.home_team == @hometeam || existinggame.away_team == @awayteam
+            existinggame.overunder = @overunder
+            existinggame.spread = @spread
+            if hometeam && awayteam
+              homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              existinggame.homecalc = homescore.round(0)
+              existinggame.awaycalc = awayscore.round(0)
+              existinggame.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
+              existinggame.oudiff = (existinggame.awaycalc + existinggame.homecalc) - existinggame.overunder
+              existinggame.save
+            end
+          end
+        end
+      else
+        # if it doesn't exist, create it with the spread and prediction
+        @t = Game.new
+        @t.date = Date.today
+        @t.home_team = @hometeam
+        @t.away_team = @awayteam
+        @t.overunder = @overunder
+        @t.spread = @spread
+        if hometeam && awayteam
+          @t.teams = hometeam, awayteam
+          homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          @t.homecalc = homescore.round(0)
+          @t.awaycalc = awayscore.round(0)
+          @t.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
+          @t.oudiff = (existinggame.awaycalc + existinggame.homecalc) - existinggame.overunder
+          @t.save
+        elsif hometeam
+          @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
+          @t.save
+        elsif awayteam
+          @t.teams = awayteam, Team.find_by(school_name: 'dummy')
+          @t.save
+        end
+    #     if hometeam && awayteam
+    #       hometeam.save
+    #       awayteam.save
+    #     # do something with your life
+    #     end
+      end
+    end
+  end
 
   task :create_game => :environment do
     hometeam = Team.find_by(school_name: @hometeam)

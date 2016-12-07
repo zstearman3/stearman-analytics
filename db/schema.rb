@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206193432) do
+ActiveRecord::Schema.define(version: 20161207161006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 20161206193432) do
     t.datetime "updated_at", null: false
     t.integer  "posessions"
     t.float    "spread"
-    t.float    "moneyline"
+    t.float    "overunder"
     t.float    "homecalc"
     t.float    "awaycalc"
     t.float    "spreaddiff"
-    t.float    "mldiff"
+    t.float    "oudiff"
   end
 
   create_table "games_teams", id: false, force: :cascade do |t|

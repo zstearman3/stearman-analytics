@@ -21,7 +21,7 @@
         </td>
         <td>
         <% if game.spread != 0 %>
-          <%= game.moneyline %>
+          <%= game.overunder %>
         <% else %>
           -
         <% end %>  
@@ -39,7 +39,7 @@
         </td>
         <td>
         <% if game.spread != 0 %>
-          <%= game.mldiff %>
+          <%= game.oudiff %>
         <% else %>
           -
         <% end %>

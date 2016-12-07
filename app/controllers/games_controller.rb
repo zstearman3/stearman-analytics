@@ -3,6 +3,6 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
   end
   
-  def betting
+  def predictions
   end
 end
