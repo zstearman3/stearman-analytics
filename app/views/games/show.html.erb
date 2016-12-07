@@ -1,3 +1,5 @@
 <h1><%= @game.away_team + " @ " + @game.home_team %></h1>
 <h2><%= @game.date.strftime("%m/%d/%Y") %></h2>
 <p># of possessions = <%= @game.posessions %></p>
+<p>Prediction = <%= @game.awaycalc.to_i.to_s + "-" + @game.homecalc.to_i.to_s %></p>
+<p>Outcome = <%= @game.away_score.to_s + "-" + @game.home_score.to_s %></p>
