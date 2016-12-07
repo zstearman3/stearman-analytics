@@ -234,21 +234,17 @@ namespace :srs do
             # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
-            if team.school_name == game[:home_team]
+            if current_team.school_name == game[:home_team]
               puts current_team.school_name
-              puts current_team.ortg
-              puts teamscore
-              puts game.posessions
-              puts opp_drtg
-              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
-              current_team.ortg = current_team.ortg.round(2)
-              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
-              current_team.drtg = current_team.drtg.round(2)
+              # current_team.ortg = current_team.ortg# + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
+              # current_team.ortg = current_team.ortg.round(2)
+              # current_team.drtg = current_team.drtg# + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
+              # current_team.drtg = current_team.drtg.round(2)
             else
-              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-              current_team.ortg = current_team.ortg.round(2)
-              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
-              current_team.drtg = current_team.drtg.round(2)
+              # current_team.ortg = current_team.ortg# + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
+              # current_team.ortg = current_team.ortg.round(2)
+              # current_team.drtg = current_team.drtg #+ (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
+              # current_team.drtg = current_team.drtg.round(2)
             end
             current_team.save
           end
@@ -279,293 +275,15 @@ namespace :srs do
       team.conf_wins = 0
       team.conf_losses = 0
       
-      team.games.each do |game|
-        if team.school_name = game.home_team
-          if game.home_score > game.away_score
+      team.games.each do |othergame|
+        if team.school_name = othergame.home_team
+          if othergame.home_score > othergame.away_score
             team.wins += 1
           else
             team.losses += 1
           end
         else
           
-        end
-      end
-    end
-  end
-  
-  
-  
-  # OLD TASKS SORED HERE DURING REFACTOR
-  
-  task :create_game => :environment do
-    hometeam = Team.find_by(school_name: @hometeam)
-    awayteam = Team.find_by(school_name: @awayteam)
-    if !hometeam.nil? && !awayteam.nil?
-      @t.teams = hometeam, awayteam
-      @t.save
-     elsif !hometeam.nil?
-      @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
-      #@t.save
-     elsif !awayteam.nil?
-      @t.teams = awayteam, Team.find_by(school_name: 'dummy')
-      #@t.save
-    end
-    if !hometeam.nil? && !awayteam.nil?
-      margin = @homescore.to_i - @awayscore.to_i
-      hometeam.point_margin ||= 0
-      awayteam.point_margin ||= 0
-      hometeam.point_margin += margin
-      awayteam.point_margin -= margin
-      hometeam.wins ||= 0
-      hometeam.losses ||= 0
-      hometeam.conf_wins ||= 0
-      hometeam.conf_losses ||= 0
-      awayteam.wins ||= 0
-      awayteam.losses ||= 0
-      awayteam.conf_wins ||= 0
-      awayteam.conf_losses ||= 0
-      if margin > 0 
-        hometeam.wins += 1
-        awayteam.losses += 1
-      else
-        awayteam.wins += 1
-        hometeam.losses += 1
-      end
-      if hometeam.conference == awayteam.conference
-        if margin > 0 
-          hometeam.conf_wins += 1
-          awayteam.conf_losses += 1
-        else
-          awayteam.conf_wins += 1
-          hometeam.conf_losses += 1
-        end
-      end
-      hometeam.save
-      awayteam.save
-    end
-  end
-  
-  task :old_update_schedules => :environment do
-    #This task is meant to be run after the teams have been created. It will 
-    #get box scores for all games for the last three days in the database up to
-    #today and fill in the stats for each team. This will overwrite old scores 
-    #for these dates. If you need to update scores from longer than 3 days before
-    #the last update, you must run the get schedules task.
-
-    #Run with last year's games first to get starting ratings.
-    #(Date.new(2015, 11, 13)..Date.new(2016, 4, 4)).each do |date|
-    startdate = Game.last.date.to_date - 3.days
-    (startdate..Date.yesterday).each do |date|
-      if Game.find_by(date: date) == nil
-        puts ":P first"
-        urldate = date.strftime("%Y%m%d")
-        url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
-        doc = Nokogiri::HTML(open(url))
-        puts doc.css('title')
-        doc.css('.scoreBox').each do |game|
-          if game.at_css('.gameExtras a')
-            @awayteam = game.css('.awayTeam .teamLocation').text
-            @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
-            if game.at_css('.awayTeam span')
-              @awayteam.slice! game.css('.awayTeam span').text
-            end
-            @awayscore = game.css('.awayTeam .finalScore').text
-            @hometeam = game.css('.homeTeam .teamLocation').text
-            @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
-            if game.at_css('.homeTeam span')
-              @hometeam.slice! game.css('.homeTeam span').text
-            end
-            @homescore = game.css('.homeTeam .finalScore').text
-            @t = Game.new
-            @t.date = date
-            @t.home_team = @hometeam
-            @t.away_team = @awayteam
-            @t.home_score = @homescore
-            @t.away_score = @awayscore
-            @t.overtime = 0
-            if game.css('.gameExtras a').text.include? 'Box Score'
-              hometeam = Team.find_by(school_name: @hometeam)
-              awayteam = Team.find_by(school_name: @awayteam)
-              gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
-              doc = Nokogiri::HTML(open(gameurl))
-              fga = 0
-              tov = 0
-              fta = 0
-              oreb = 0
-              doc.css('.data #totals').each do |totals|
-                shots = totals.xpath('./td[3]').text
-                freethrows = totals.xpath('./td[5]').text
-                turnovers = totals.xpath('./td[9]').text.to_i
-                offreb = totals.xpath('./td[6]').text.to_i
-                fga += shots.partition('-').last.to_i
-                fta += freethrows.partition('-').last.to_i
-                tov += turnovers
-                oreb += offreb
-                totals.remove
-              end
-              poss = 0.48 * (fga + tov + (0.475 * fta) - oreb)
-              @t.posessions =  poss
-              Rake::Task['ncaa_teams:create_game'].execute
-              doc.css('.data #head, .data #pct, .data .title').each do |trash|
-                trash.remove
-              end
-              doc.css('.data tr').each do |player|
-                # name = player.css('a').text
-                # puts player
-              end
-            else
-              hometeam = Team.find_by(school_name: @hometeam)
-              awayteam = Team.find_by(school_name: @awayteam)
-              if hometeam && awayteam
-                puts hometeam.school_name
-                poss = (hometeam.tempo * awayteam.tempo)/69.0
-                @t.posessions = poss
-                Rake::Task['ncaa_teams:create_game'].execute
-              end
-            end
-          end
-        end
-      else
-        if Game.find_by(date: date + 2.days) == nil
-          urldate = date.strftime("%Y%m%d")
-          url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
-          doc = Nokogiri::HTML(open(url))
-          puts doc.css('title')
-          doc.css('.scoreBox').each do |game|
-            if game.at_css('.gameExtras a')
-              @awayteam = game.css('.awayTeam .teamLocation').text
-              @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
-              if game.at_css('.awayTeam span')
-                @awayteam.slice! game.css('.awayTeam span').text
-              end
-              @awayscore = game.css('.awayTeam .finalScore').text
-              @hometeam = game.css('.homeTeam .teamLocation').text
-              @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
-              if game.at_css('.homeTeam span')
-                @hometeam.slice! game.css('.homeTeam span').text
-              end
-              @homescore = game.css('.homeTeam .finalScore').text
-              @overtime = 0
-              if game.css('.gameExtras a').text.include? 'Box Score'
-                hometeam = Team.find_by(school_name: @hometeam)
-                awayteam = Team.find_by(school_name: @awayteam)
-                gameurl = 'http://www.cbssports.com' + game.css('.gameExtras a').first.attr('href')
-                doc = Nokogiri::HTML(open(gameurl))
-                fga = 0
-                tov = 0
-                fta = 0
-                oreb = 0
-                doc.css('.data #totals').each do |totals|
-                  shots = totals.xpath('./td[3]').text
-                  freethrows = totals.xpath('./td[5]').text
-                  turnovers = totals.xpath('./td[9]').text.to_i
-                  offreb = totals.xpath('./td[6]').text.to_i
-                  fga += shots.partition('-').last.to_i
-                  fta += freethrows.partition('-').last.to_i
-                  tov += turnovers
-                  oreb += offreb
-                  totals.remove
-                end
-                poss = 0.48 * (fga + tov + (0.475 * fta) - oreb)
-                Game.where(:date => date).find_each do |oldgame|
-                  if oldgame.home_team == @hometeam || oldgame.away_team == @awayteam
-                  oldgame.home_score = @homescore
-                  oldgame.away_score = @awayscore
-                  oldgame.posessions = poss
-                  oldgame.overtime = @overtime  
-                    
-                  puts oldgame.home_team
-                  oldgame.save
-                  end
-                end
-                doc.css('.data #head, .data #pct, .data .title').each do |trash|
-                  trash.remove
-                end
-                doc.css('.data tr').each do |player|
-                  # name = player.css('a').text
-                  # puts player
-                end
-              else
-                hometeam = Team.find_by(school_name: @hometeam)
-                awayteam = Team.find_by(school_name: @awayteam)
-                Game.where(:date => date).find_each do |oldgame|
-                  if oldgame.home_team == @hometeam || oldgame.away_team == @awayteam
-                    oldgame.home_score = @homescore
-                    oldgame.away_score = @awayscore
-                    oldgame.posessions = poss
-                    oldgame.overtime = @overtime  
-                    if hometeam && awayteam
-                      poss = (hometeam.tempo * awayteam.tempo)/69.0
-                      puts oldgame.home_team
-                      oldgame.save
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    existing = Game.find_by(date: Date.today)
-    urldate = Date.today.strftime("%Y%m%d")
-    url = 'http://www.cbssports.com/collegebasketball/scoreboard/div1/' + urldate
-    doc = Nokogiri::HTML(open(url))
-    puts doc.css('title')
-    doc.css('.scoreBox').each do |game|
-      @awayteam = game.css('.awayTeam .teamLocation').text
-      @awayteam.slice! game.css('.awayTeam .teamLocation .teamRecord').text
-      if game.at_css('.awayTeam span')
-        @awayteam.slice! game.css('.awayTeam span').text
-      end
-      @hometeam = game.css('.homeTeam .teamLocation').text
-      @hometeam.slice! game.css('.homeTeam .teamLocation .teamRecord').text
-      if game.at_css('.homeTeam span')
-        @hometeam.slice! game.css('.homeTeam span').text
-      end
-      if existing 
-        Game.where(:date => Date.today).find_each do |existinggame|
-          if existinggame.home_team == @hometeam || existinggame.away_team == @awayteam
-            overunder = game.at_css('.awayTeam .gameOdds').text
-            overunder.slice! 'O/U'
-            overunder.strip!
-            existinggame.moneyline = overunder.to_f
-            existinggame.spread = game.css('.homeTeam .gameOdds').text.to_f
-            existinggame.home_score = ""
-            existinggame.away_score = ""
-            hometeam = Team.find_by(school_name: @hometeam)
-            awayteam = Team.find_by(school_name: @awayteam)      
-            homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-            awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-            existinggame.homecalc = homescore.round(0)
-            existinggame.awaycalc = awayscore.round(0)
-            existinggame.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
-            existinggame.mldiff = (existinggame.awaycalc + existinggame.homecalc) - existinggame.moneyline
-            existinggame.save
-          end
-        end
-      else
-        @t = Game.new
-        @t.date = Date.today
-        @t.home_team = @hometeam
-        @t.away_team = @awayteam
-        puts @t
-        hometeam = Team.find_by(school_name: @hometeam)
-        awayteam = Team.find_by(school_name: @awayteam)
-        if hometeam && awayteam
-          @t.teams = hometeam, awayteam
-          @t.save
-         elsif hometeam
-          @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
-          #@t.save
-         elsif awayteam
-          @t.teams = awayteam, Team.find_by(school_name: 'dummy')
-          #@t.save
-        end
-        if hometeam && awayteam
-          hometeam.save
-          awayteam.save
-         # do something with your life
         end
       end
     end
