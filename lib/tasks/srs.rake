@@ -204,67 +204,110 @@ namespace :srs do
     end
   end
   
-  
   task :simple_rating => :environment do
-    5.times do
-    error = 0
+    3.times do
+      error = 0
       Team.all.each do |team|
-        current_team = Team.find_by(school_name: team.school_name)
+        oldrating = team.ortg - team.drtg
         team.games.each do |game|
-          if team.school_name == game[:home_team]
-            opponent = game[:away_team]
+          teamscore = nil
+          if team.school_name == game.home_team
+            opponent = game.away_team
             teamscore = game.home_score
             opponentscore = game.away_score
           else
-            opponent = game[:home_team]
+            opponent = game.home_team
             teamscore = game.away_score
             opponentscore = game.home_score
           end
           opp_team = Team.find_by(school_name: opponent)
-          if opp_team && game.posessions
-            opp_rating = opp_team.rating
-            opp_tempo = opp_team.tempo
+          if opp_team && teamscore && game.posessions
             opp_ortg = opp_team.ortg
             opp_drtg = opp_team.drtg
+            opp_tempo = opp_team.tempo
             # 69.0 should be tuned to a better number in the future. 0.15 is a multipier
             # that should be tuned as well when more info is available.
-            current_team.tempo = current_team.tempo + (0.15 * (game.posessions - (current_team.tempo * opp_tempo / 69.0)))
-            current_team.tempo = current_team.tempo.round(2)
-            
+            team.tempo = team.tempo + (0.15 * (game.posessions - (team.tempo * opp_tempo / 69.0)))
+            team.tempo = team.tempo.round(2)
+                        
             # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
-            if current_team.school_name == game[:home_team]
-              puts current_team.school_name
-              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg / (102.00 * 0.99))))
-              current_team.ortg = current_team.ortg.round(2)
-              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 1.01))))
-              current_team.drtg = current_team.drtg.round(2)
+            if team.school_name == game.home_team
+              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (102.0 * 0.99))))
+              team.ortg = team.ortg.round(2)
+              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (102.00 * 1.01))))
+              team.drtg = team.drtg.round(2)
             else
-              current_team.ortg = current_team.ortg + (0.2 * ((teamscore * (100.00 /game.posessions)) - (current_team.ortg * opp_drtg/ (102.00 * 1.01))))
-              current_team.ortg = current_team.ortg.round(2)
-              current_team.drtg = current_team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - (current_team.drtg * opp_ortg/ (102.00 * 0.99))))
-              current_team.drtg = current_team.drtg.round(2)
+              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (102.0 * 1.01))))
+              team.ortg = team.ortg.round(2)
+              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (102.00 * 0.99))))
+              team.drtg = team.drtg.round(2)
             end
-            current_team.save
+            team.save
           end
         end
-        
         # All games have been collected now. Still, each team will iterate through
-        # this section 5 times. 
+        # this section 3 times. 
         if team.games.count != 0
-          oldrating = current_team.rating
-          current_team.rating = ((current_team.ortg - 100) + (100 - current_team.drtg))/2
-          current_team.rating = current_team.rating.round(1)
-          error = error + (current_team.rating - oldrating).abs
+          oldrating = team.rating || 0
+          team.rating = ((team.ortg - 100) + (100 - team.drtg))/2
+          team.rating = team.rating.round(1)
+          team.save
+          error = error + (team.rating - oldrating).abs
           error = error.round(1)
         end
       end
       puts error
     end
     # We are now outside of the 5.times loop, so this section is only performed once at the end.
+    Team.all.each do |team|
+      team.wins = 0
+      team.losses = 0
+      team.conf_wins = 0
+      team.conf_losses = 0
+      @teamname = team.school_name
+      team.games.each do |game|
+        if game.home_score
+          if game.home_team == @teamname
+            opponent = Team.find_by(school_name: game.away_team)
+            if game.home_score > game.away_score
+              team.wins += 1
+            else
+              team.losses +=1
+            end
+            if opponent
+              if team.conference == opponent.conference
+                if game.home_score > game.away_score
+                  team.conf_wins += 1
+                else
+                  team.conf_losses +=1
+                end
+              end
+            end
+          else
+            opponent = Team.find_by(school_name: game.home_team)
+            if game.home_score > game.away_score
+              team.losses += 1
+            else
+              team.wins += 1
+            end
+            if opponent
+              if team.conference == opponent.conference
+                if game.home_score > game.away_score
+                  team.conf_losses += 1
+                else
+                  team.conf_wins +=1
+                end
+              end
+            end
+          end
+        end
+      end
+      team.save
+    end
   end
-  
+
   
   task :calculate_record => :environment do
     Team.all.each do |team|
