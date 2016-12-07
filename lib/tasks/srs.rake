@@ -264,11 +264,8 @@ namespace :srs do
     end
     # We are now outside of the 5.times loop, so this section is only performed once at the end.
     Team.all.each do |team|
-      current_team = Team.find_by(school_name: team.school_name)
-      rank = Team.where("rating > ?", current_team.rating).count + 1
-      current_team.rank = rank
-      current_team.save
-      
+      #rank = Team.where("rating > ?", team.rating).count + 1
+      #team.rank = rank
       # determine the record of the team
       team.wins = 0
       team.losses = 0
@@ -286,6 +283,7 @@ namespace :srs do
           
         end
       end
+      team.save
     end
   end
 end
