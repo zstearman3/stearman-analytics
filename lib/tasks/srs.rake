@@ -279,11 +279,15 @@ namespace :srs do
           else
             team.losses += 1
           end
+        else
+          if game.home_score > game.away_score
+            team.losses += 1
           else
-          
+            team.wins += 1
           end
+        end
       end
-      team.save
     end
+    team.save
   end
 end
