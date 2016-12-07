@@ -143,13 +143,15 @@ namespace :srs do
               else
                 Game.where(:date => date).find_each do |oldgame|
                   if oldgame.home_team == @hometeam || oldgame.away_team == @awayteam
-                  oldgame.home_score = @homescore
-                  oldgame.away_score = @awayscore
-                  oldgame.posessions = poss
-                  oldgame.overtime = @overtime  
-                  poss = (hometeam.tempo * awayteam.tempo)/69.0
-                  puts oldgame.home_team
-                  oldgame.save
+                    oldgame.home_score = @homescore
+                    oldgame.away_score = @awayscore
+                    oldgame.posessions = poss
+                    oldgame.overtime = @overtime  
+                    if oldgame.home_team && oldgame.away_team
+                      poss = (hometeam.tempo * awayteam.tempo)/69.0
+                      puts oldgame.home_team
+                      oldgame.save
+                    end
                   end
                 end
               end
