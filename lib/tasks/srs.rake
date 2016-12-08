@@ -277,7 +277,8 @@ namespace :srs do
       team.losses = 0
       team.conf_wins = 0
       team.conf_losses = 0
-      team.rank = Team.where("rating > ?", team.rating).not(school_name: "dummy").count + 1
+      team.rank = Team.where("rating > ?", team.rating).where.not(school_name: "dummy").count + 1
+      puts team.rank
       @teamname = team.school_name
       team.games.each do |game|
         if game.home_score
