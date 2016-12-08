@@ -8,7 +8,7 @@
       <th data-field="opponent" data-sortable="true"><%= "Line Difference" %></th>
       <th data-field="opponent" data-sortable="true"><%= "O/U Difference" %></th>
     </tr>
-    <% Game.where(:date => Date.today).find_each do |game| %>
+    <% @games.each do |game| %>
       <% result = "L" %>
       <tr>
         <td><%= game.away_team + " @ " + game.home_team %></td>

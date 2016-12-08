@@ -4,5 +4,7 @@ class GamesController < ApplicationController
   end
   
   def predictions
+    @date = params[:year].to_s + "/" + params[:month].to_s + "/" + params[:day].to_s
+    @games = Game.where(:date => @date)
   end
 end
