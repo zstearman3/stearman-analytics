@@ -208,6 +208,15 @@ namespace :srs do
     3.times do
       error = 0
       Team.all.each do |team|
+        if team.ortg == nil
+          team.ortg = 102
+        end
+        if team.drtg == nil
+          team.drtg = 102
+        end
+        if team.tempo == nil
+          team.tempo = 69
+        end
         team.games.each do |game|
           teamscore = nil
           if team.school_name == game.home_team
