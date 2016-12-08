@@ -207,11 +207,12 @@ namespace :srs do
   end
   
   task :simple_rating => :environment do
-    3.times do
+    2.times do
       error = 0
       Team.all.each do |team|
         if team.ortg == nil
           team.ortg = 102
+          puts team
         end
         if team.drtg == nil
           team.drtg = 102
@@ -258,7 +259,7 @@ namespace :srs do
           end
         end
         # All games have been collected now. Still, each team will iterate through
-        # this section 3 times. 
+        # this section 2 times. 
         if team.games.count != 0
           oldrating = team.rating || 0
           team.rating = ((team.ortg - 100) + (100 - team.drtg))/2
@@ -270,12 +271,13 @@ namespace :srs do
       end
       puts error
     end
-    # We are now outside of the 5.times loop, so this section is only performed once at the end.
+    # We are now outside of the 2.times loop, so this section is only performed once at the end.
     Team.all.each do |team|
       team.wins = 0
       team.losses = 0
       team.conf_wins = 0
       team.conf_losses = 0
+      team.rank = Team.where("rating > ?", team.rating).not(school_name: "dummy").count + 1
       @teamname = team.school_name
       team.games.each do |game|
         if game.home_score
@@ -328,52 +330,5 @@ namespace :srs do
     sleep 2
     Rake::Task['srs:betting_predictions'].execute
   end
-  # task :calculate_record => :environment do
-  #   Team.all.each do |team|
-  #     team.wins = 0
-  #     team.losses = 0
-  #     team.conf_wins = 0
-  #     team.conf_losses = 0
-  #     @teamname = team.school_name
-  #     team.games.each do |game|
-  #       if game.home_score
-  #         if game.home_team == @teamname
-  #           opponent = Team.find_by(school_name: game.away_team)
-  #           if game.home_score > game.away_score
-  #             team.wins += 1
-  #           else
-  #             team.losses +=1
-  #           end
-  #           if opponent
-  #             if team.conference == opponent.conference
-  #               if game.home_score > game.away_score
-  #                 team.conf_wins += 1
-  #               else
-  #                 team.conf_losses +=1
-  #               end
-  #             end
-  #           end
-  #         else
-  #           opponent = Team.find_by(school_name: game.home_team)
-  #           if game.home_score > game.away_score
-  #             team.losses += 1
-  #           else
-  #             team.wins += 1
-  #           end
-  #           if opponent
-  #             if team.conference == opponent.conference
-  #               if game.home_score > game.away_score
-  #                 team.conf_losses += 1
-  #               else
-  #                 team.conf_wins +=1
-  #               end
-  #             end
-  #           end
-  #         end
-  #       end
-  #     end
-  #     team.save
-  #   end
 
-  # end
 end

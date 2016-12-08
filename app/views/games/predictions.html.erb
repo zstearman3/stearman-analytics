@@ -1,4 +1,11 @@
-<div class="col-sm-12">
+<div class="col-sm-14">
+  <%= link_to "Previous Day", '/predictions/' + (@date.to_date - 1.day).year.to_s + "/" + 
+              + (@date.to_date - 1.day).month.to_s + "/" + (@date.to_date - 1.day).day.to_s %>
+  <% if @date.to_date != Date.today %>
+    <%= link_to "Next Day", '/predictions/' + @date.to_date.year.to_s + "/" + 
+                + @date.to_date.month.to_s + "/" + (@date.to_date + 1.day).day.to_s,
+                { :style=>"float: right;" }%>
+  <% end %>
   <table class="games table table-striped table-bordered" >
     <tr>
       <th data-field="date" data-sortable="true"><%= "Matchup" %></th>
@@ -7,11 +14,17 @@
       <th data-field="opponent" data-sortable="true"><%= "Prediciton" %></th>
       <th data-field="opponent" data-sortable="true"><%= "Line Difference" %></th>
       <th data-field="opponent" data-sortable="true"><%= "O/U Difference" %></th>
+      <% if @date.to_date != Date.today %>
+        <th data-field="opponent" data-sortable="true"><%= "Score" %></th>
+        <th data-field="opponent" data-sortable="true"><%= "Line Win" %></th>
+      <% end %>
     </tr>
+    <% spreadwins = 0 %>
+    <% spreadlosses = 0 %>
     <% @games.each do |game| %>
       <% result = "L" %>
       <tr>
-        <td><%= game.away_team + " @ " + game.home_team %></td>
+        <td><%= link_to game.away_team + " @ " + game.home_team, game %></td>
         <td>
         <% if game.spread != 0 %>
           <%= game.spread %>
@@ -44,6 +57,38 @@
           -
         <% end %>
         </td>
+        <% if @date.to_date != Date.today %>
+          <td><%= game.away_score.to_s + " - " + game.home_score.to_s %></td>
+          <% outcome = game.away_score - game.home_score %>
+          <td>
+          <% if game.spread != 0 && game.spreaddiff.to_i < -0.5 && outcome < game.spread.to_i %> 
+            Win
+            <% spreadwins += 1 %>
+          <% elsif game.spread != 0 && game.spreaddiff.to_i < -0.5 && outcome > game.spread.to_i %> 
+            Loss
+            <% spreadlosses += 1 %>
+          <% elsif game.spread != 0 && game.spreaddiff.to_i > 0.5 && outcome > game.spread.to_i %> 
+            Win
+            <% spreadwins += 1 %>
+          <% elsif game.spread != 0 && game.spreaddiff.to_i > 0.5 && outcome < game.spread.to_i %> 
+            Loss
+            <% spreadlosses += 1 %>
+          <% end %>
+          </td>
+        <% end %>
+        </tr>
+    <% end %>
+    <% if @date.to_date != Date.today %>
+      <tr style="font-weight:bold">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td align="right">Total</td>
+        <td align="right"><%= spreadwins.to_s + "-" + spreadlosses.to_s %></td>
+      </tr>
     <% end %>
   </table>
 </div>

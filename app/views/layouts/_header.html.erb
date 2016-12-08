@@ -7,6 +7,8 @@
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "Home",     root_url %></li>
         <li><%= link_to "Rankings", rankings_path %></li>
+        <li><%= link_to "Predictions", '/predictions/' + Date.today.year.to_s + 
+                        "/" + Date.today.month.to_s + "/" + Date.today.day.to_s %></li>
         <li><%= link_to "Blog",     '#' %></li>
         <% if logged_in? %>
           <li><%= link_to "Users", '#' %></li>
