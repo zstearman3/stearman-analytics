@@ -318,53 +318,62 @@ namespace :srs do
     end
   end
 
-  
-  task :calculate_record => :environment do
-    Team.all.each do |team|
-      team.wins = 0
-      team.losses = 0
-      team.conf_wins = 0
-      team.conf_losses = 0
-      @teamname = team.school_name
-      team.games.each do |game|
-        if game.home_score
-          if game.home_team == @teamname
-            opponent = Team.find_by(school_name: game.away_team)
-            if game.home_score > game.away_score
-              team.wins += 1
-            else
-              team.losses +=1
-            end
-            if opponent
-              if team.conference == opponent.conference
-                if game.home_score > game.away_score
-                  team.conf_wins += 1
-                else
-                  team.conf_losses +=1
-                end
-              end
-            end
-          else
-            opponent = Team.find_by(school_name: game.home_team)
-            if game.home_score > game.away_score
-              team.losses += 1
-            else
-              team.wins += 1
-            end
-            if opponent
-              if team.conference == opponent.conference
-                if game.home_score > game.away_score
-                  team.conf_losses += 1
-                else
-                  team.conf_wins +=1
-                end
-              end
-            end
-          end
-        end
-      end
-      team.save
-    end
-
+  desc "perform all updates"
+  task :update do
+    Rake::Task['srs:update_schedules'].execute
+    puts "Schedules Updated"
+    sleep 2
+    Rake::Task['srs:simple_rating'].execute 
+    puts "Ratings Complete"
+    sleep 2
+    Rake::Task['srs:betting_predictions'].execute
   end
+  # task :calculate_record => :environment do
+  #   Team.all.each do |team|
+  #     team.wins = 0
+  #     team.losses = 0
+  #     team.conf_wins = 0
+  #     team.conf_losses = 0
+  #     @teamname = team.school_name
+  #     team.games.each do |game|
+  #       if game.home_score
+  #         if game.home_team == @teamname
+  #           opponent = Team.find_by(school_name: game.away_team)
+  #           if game.home_score > game.away_score
+  #             team.wins += 1
+  #           else
+  #             team.losses +=1
+  #           end
+  #           if opponent
+  #             if team.conference == opponent.conference
+  #               if game.home_score > game.away_score
+  #                 team.conf_wins += 1
+  #               else
+  #                 team.conf_losses +=1
+  #               end
+  #             end
+  #           end
+  #         else
+  #           opponent = Team.find_by(school_name: game.home_team)
+  #           if game.home_score > game.away_score
+  #             team.losses += 1
+  #           else
+  #             team.wins += 1
+  #           end
+  #           if opponent
+  #             if team.conference == opponent.conference
+  #               if game.home_score > game.away_score
+  #                 team.conf_losses += 1
+  #               else
+  #                 team.conf_wins +=1
+  #               end
+  #             end
+  #           end
+  #         end
+  #       end
+  #     end
+  #     team.save
+  #   end
+
+  # end
 end
