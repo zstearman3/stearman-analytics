@@ -59,7 +59,7 @@
         </td>
         <% if @date.to_date != Date.today %>
           <td><%= game.away_score.to_s + " - " + game.home_score.to_s %></td>
-          <% outcome = game.away_score - game.home_score %>
+          <% outcome = game.away_score.to_i - game.home_score.to_i %>
           <td>
           <% if game.spread != 0 && game.spreaddiff.to_i < -0.5 && outcome < game.spread.to_i %> 
             Win
