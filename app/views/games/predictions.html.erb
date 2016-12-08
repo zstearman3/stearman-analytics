@@ -1,9 +1,9 @@
 <div class="col-sm-14">
   <%= link_to "Previous Day", '/predictions/' + (@date.to_date - 1.day).year.to_s + "/" + 
-              + (@date.to_date - 1.day).month.to_s + "/" + (@date.to_date - 1.day).day.to_s %>
+               (@date.to_date - 1.day).month.to_s + "/" + (@date.to_date - 1.day).day.to_s %>
   <% if @date.to_date != Date.today %>
     <%= link_to "Next Day", '/predictions/' + @date.to_date.year.to_s + "/" + 
-                + @date.to_date.month.to_s + "/" + (@date.to_date + 1.day).day.to_s,
+                 @date.to_date.month.to_s + "/" + (@date.to_date + 1.day).day.to_s,
                 { :style=>"float: right;" }%>
   <% end %>
   <table class="games table table-striped table-bordered" >
