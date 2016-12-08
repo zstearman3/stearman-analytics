@@ -208,7 +208,6 @@ namespace :srs do
     3.times do
       error = 0
       Team.all.each do |team|
-        oldrating = team.ortg - team.drtg
         team.games.each do |game|
           teamscore = nil
           if team.school_name == game.home_team
