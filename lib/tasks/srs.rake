@@ -192,8 +192,8 @@ namespace :srs do
           @t.awaycalc = awayscore.round(0)
           halfaway = ((awayscore * 2.0).round(0)) / 2.0
           halfhome = ((homescore * 2.0).round(0)) / 2.0
-          @t.spreaddiff = (halfaway - halfhome) - @spread
-          @t.oudiff = (halfaway + halfhome) - @overunder
+          @t.spreaddiff = (halfaway - halfhome) - @spread.to_f
+          @t.oudiff = (halfaway + halfhome) - @overunder.to_f
           @t.save
         elsif hometeam
           @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
