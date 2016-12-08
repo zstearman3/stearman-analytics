@@ -190,8 +190,10 @@ namespace :srs do
           awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
           @t.homecalc = homescore.round(0)
           @t.awaycalc = awayscore.round(0)
-          @t.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
-          @t.oudiff = (existinggame.awaycalc + existinggame.homecalc) - existinggame.overunder
+          halfaway = ((awayscore * 2.0).round(0)) / 2.0
+          halfhome = ((homescore * 2.0).round(0)) / 2.0
+          @t.spreaddiff = (halfaway - halfhome) - @spread
+          @t.oudiff = (halfaway + halfhome) - @overunder
           @t.save
         elsif hometeam
           @t.teams = hometeam, Team.find_by(school_name: 'dummy')  
