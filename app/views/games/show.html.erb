@@ -1,5 +1,53 @@
-<h1><%= @game.away_team + " @ " + @game.home_team %></h1>
-<h2><%= @game.date.strftime("%m/%d/%Y") %></h2>
-<p># of possessions = <%= @game.posessions %></p>
-<p>Prediction = <%= @game.awaycalc.to_i.to_s + "-" + @game.homecalc.to_i.to_s %></p>
-<p>Outcome = <%= @game.away_score.to_s + "-" + @game.home_score.to_s %></p>
+<div class="GamePage">
+  <h1><%= link_to(@game.away_team, Team.find_by_school_name(@game.away_team)) + " @ " + 
+          link_to(@game.home_team, Team.find_by_school_name(@game.home_team)) %></h1>
+  <h2><%= @game.date.strftime("%m/%d/%Y") %></h2>
+  <% hometeam = Team.find_by_school_name(@game.home_team) %>
+  <% awayteam = Team.find_by_school_name(@game.away_team) %>
+  <div class="col-sm-6">
+    <h2>Pre-Game Rankings & Predictions</h2>
+  <table class="team-ratings table table-striped table-bordered" >
+      <tr>
+        <td><%= @game.away_team + " ORtg" %></td>
+        <td><%= awayteam.ortg %></td>
+      </tr>
+      <tr>
+        <td><%= @game.away_team + " DRtg" %></td>
+        <td><%= awayteam.drtg %></td>
+      </tr>
+      <tr>
+        <td><%= @game.away_team + " Tempo" %></td>
+        <td><%= awayteam.tempo %></td>
+      </tr>
+      <tr>
+        <td><%= @game.home_team + " ORtg" %></td>
+        <td><%= hometeam.ortg %></td>
+      </tr>
+      <tr>
+        <td><%= @game.home_team + " DRtg" %></td>
+        <td><%= hometeam.drtg %></td>
+      </tr>
+      <tr>
+        <td><%= @game.home_team + " Tempo" %></td>
+        <td><%= hometeam.tempo %></td>
+      </tr>
+      <tr>
+        <td>Predicted Score</td>
+        <td><%= @game.awaycalc.to_i.to_s + "-" + @game.homecalc.to_i.to_s %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-sm-6">
+    <h2>Outcome</h2>
+    <table class="team-ratings table table-striped table-bordered" >
+     <tr>
+       <td>Score</td>
+       <td><%= @game.away_score.to_s + "-" + @game.home_score.to_s %></td>
+     </tr>
+     <tr>
+       <td>Possessions</td>
+       <td><%= @game.posessions %></td>
+     </tr>
+    </table>
+  </div>
+</div>

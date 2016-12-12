@@ -37,6 +37,13 @@ namespace :srs do
           end
           @homescore = game.css('.homeTeam .finalScore').text
           @overtime = 0 # I need to find a way to take OT values from this page still
+          if game.css('.periodLabels').text != ""
+            if game.css('.periodLabels').text != "OT"
+              @overtime = 2
+            else
+              @overtime = 1
+            end
+          end
           @neutral = "false" # I can't determine if games are on a neutral court yet
           hometeam = Team.find_by(school_name: @hometeam)
           awayteam = Team.find_by(school_name: @awayteam)
@@ -73,7 +80,8 @@ namespace :srs do
           else
             # If no box score was present, we still don't have a value for possessions
             if hometeam && awayteam
-              @posessions = (hometeam.tempo * awayteam.tempo)/69.0 #69.0 represents NCAA average
+              @posessions = (hometeam.tempo * awayteam.tempo)/69.0
+              @posessions =  ( @posessions * ( 1 + (0.125 * @overtime))) #69.0 represents NCAA average
               #69.0 needs to be tuned or I need to truly find the NCAA average here
             end
           end
@@ -166,8 +174,8 @@ namespace :srs do
             existinggame.overunder = @overunder
             existinggame.spread = @spread
             if hometeam && awayteam
-              homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-              awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
               existinggame.homecalc = homescore.round(0)
               existinggame.awaycalc = awayscore.round(0)
               existinggame.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
@@ -186,8 +194,8 @@ namespace :srs do
         @t.spread = @spread
         if hometeam && awayteam
           @t.teams = hometeam, awayteam
-          homescore = (((hometeam.ortg * awayteam.drtg) / (102.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-          awayscore = (((awayteam.ortg * hometeam.drtg) / (102.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 0.99)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.01)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
           @t.homecalc = homescore.round(0)
           @t.awaycalc = awayscore.round(0)
           halfaway = ((awayscore * 2.0).round(0)) / 2.0
@@ -238,21 +246,21 @@ namespace :srs do
             opp_tempo = opp_team.tempo
             # 69.0 should be tuned to a better number in the future. 0.15 is a multipier
             # that should be tuned as well when more info is available.
-            team.tempo = team.tempo + (0.15 * (game.posessions - (team.tempo * opp_tempo / 69.0)))
+            team.tempo = team.tempo + (0.15 * ((game.posessions / (1 + (0.125 * game.overtime))) - (team.tempo * opp_tempo / 69.0)))
             team.tempo = team.tempo.round(2)
                         
             # This handles the team rating for home vs away teams. Home court is simply done by dividing by a multiplier. Will change soon.
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
             if team.school_name == game.home_team
-              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (102.0 * 0.99))))
+              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.99))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (102.00 * 1.01))))
+              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.01))))
               team.drtg = team.drtg.round(2)
             else
-              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (102.0 * 1.01))))
+              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.01))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (102.00 * 0.99))))
+              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.99))))
               team.drtg = team.drtg.round(2)
             end
             team.save
