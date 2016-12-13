@@ -9,3 +9,23 @@
   Underdogs ATS: <%= @games.where("spreaddiff > ?", 0.5).where(:ats => "W").count.to_s + "-" +
                      @games.where("spreaddiff > ?", 0.5).where(:ats => "L").count.to_s %>
 </p>
+<% wins = 0 %>
+<% losses = 0 %>
+<% Game.where.not(homecalc: "0").where.not(home_score: "0").each do |su| %>
+ <% if su.home_score > su.away_score %>
+   <% if su.homecalc > su.awaycalc %>
+      <% wins += 1 %>
+    <% else %>
+      <% losses += 1 %>
+    <% end %>
+  <% else %>
+    <% if su.homecalc < su.awaycalc %>
+       <% wins += 1 %>
+    <% else %>
+      <% losses += 1 %>
+    <% end %>
+  <% end %>
+<% end %>
+<p>
+  Straight up: <%= wins.to_s + "-" + losses.to_s %>
+</p>
