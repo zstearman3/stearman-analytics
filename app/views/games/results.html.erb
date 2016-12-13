@@ -1,3 +1,7 @@
 <p>
  Overall ATS: <%= @games.where(:ats => "W").count.to_s + '-' + @games.where(:ats => "L").count.to_s %>
 </p>
+<p>
+  Favorites ATS: <%= @games.where("spread < ?", 0.0).where(:ats => "W").count.to_s + "-" +
+                     @games.where("spread < ?", 0.0).where(:ats => "L").count.to_s %>
+</p>
