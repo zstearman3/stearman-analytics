@@ -2,10 +2,10 @@
  Overall ATS: <%= @games.where(:ats => "W").count.to_s + '-' + @games.where(:ats => "L").count.to_s %>
 </p>
 <p>
-  Favorites ATS: <%= @games.where("spread < ?", -0.5).where(:ats => "W").count.to_s + "-" +
-                     @games.where("spread < ?", -0.5).where(:ats => "L").count.to_s %>
+  Favorites ATS: <%= @games.where("spreaddiff < ?", -0.5).where(:ats => "W").count.to_s + "-" +
+                     @games.where("spreaddiff < ?", -0.5).where(:ats => "L").count.to_s %>
 </p>
 <p>
-  Underdogs ATS: <%= @games.where("spread > ?", 0.5).where(:ats => "W").count.to_s + "-" +
-                     @games.where("spread > ?", 0.5).where(:ats => "L").count.to_s %>
+  Underdogs ATS: <%= @games.where("spreaddiff > ?", 0.5).where(:ats => "W").count.to_s + "-" +
+                     @games.where("spreaddiff > ?", 0.5).where(:ats => "L").count.to_s %>
 </p>
