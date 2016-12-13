@@ -1,6 +1,8 @@
 <div class="GamePage">
-    <h1><%= link_to(@game.away_team, Team.find_by_school_name(@game.away_team)) + " @ " + 
-            link_to(@game.home_team, Team.find_by_school_name(@game.home_team)) %></h1>
+    <% hometeam = Team.find_by_school_name(@game.home_team) %>
+    <% awayteam = Team.find_by_school_name(@game.away_team) %>
+    <h1><small><%= awayteam.rank %></small><%= link_to(@game.away_team, Team.find_by_school_name(@game.away_team)) + " @ " %> 
+        <small><%= hometeam.rank %></small><%= link_to(@game.home_team, Team.find_by_school_name(@game.home_team)) %></h1>
     <h2><%= @game.date.strftime("%m/%d/%Y") %></h2>
     <% hometeam = Team.find_by_school_name(@game.home_team) %>
     <% awayteam = Team.find_by_school_name(@game.away_team) %>
