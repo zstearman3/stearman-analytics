@@ -33,6 +33,10 @@
           <td><%= @game.awaycalc.to_i.to_s %></td>
           <td><%= @game.homecalc.to_i.to_s %></td>
         </tr>
+        <tr>
+          <td>Vegas Line</td>
+          <td colspan="2"><%= @game.home_team + " " + @game.spread.to_i.to_s %></td>
+        </tr>
       </table>
     </div>
     <div class="col-sm-6">

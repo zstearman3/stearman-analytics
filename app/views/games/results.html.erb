@@ -1,0 +1,3 @@
+<p>
+ Overall ATS: <%= @games.where(:ats => "W").count.to_s + '-' + @games.where(:ats => "L").count.to_s %>
+</p>

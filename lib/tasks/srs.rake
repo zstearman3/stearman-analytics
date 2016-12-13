@@ -101,6 +101,17 @@ namespace :srs do
             updatedgame.posessions = @posessions
             updatedgame.overtime = @overtime
             updatedgame.neutral = @neutral
+            outcome = @awayscore.to_i - @homescore.to_i
+            if updatedgame.spread != 0 && updatedgame.spreaddiff.to_i < -0.5 && outcome < updatedgame.spread.to_i  
+              @ats = "W"
+            elsif updatedgame.spread != 0 && updatedgame.spreaddiff.to_i < -0.5 && outcome > updatedgame.spread.to_i 
+              @ats = "L"
+            elsif updatedgame.spread != 0 && updatedgame.spreaddiff.to_i > 0.5 && outcome > updatedgame.spread.to_i
+              @ats = "W"
+            elsif updatedgame.spread != 0 && updatedgame.spreaddiff.to_i > 0.5 && outcome < updatedgame.spread.to_i 
+              @ats = "L"
+            end
+            updatedgame.ats = @ats
             updatedgame.save
           else
             # create a new game

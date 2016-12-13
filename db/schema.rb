@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207161006) do
+ActiveRecord::Schema.define(version: 20161213185856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20161207161006) do
     t.float    "awaycalc"
     t.float    "spreaddiff"
     t.float    "oudiff"
+    t.string   "ats"
   end
 
   create_table "games_teams", id: false, force: :cascade do |t|
