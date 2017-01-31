@@ -1,7 +1,7 @@
 <div class="col-sm-14">
   <%= link_to "Previous Day", '/predictions/' + (@date.to_date - 1.day).year.to_s + "/" + 
                (@date.to_date - 1.day).month.to_s + "/" + (@date.to_date - 1.day).day.to_s %>
-  <% if @date.to_date != Date.today %>
+  <% if @date.to_date != (Time.zone.now - 8.hours).to_date %>
     <%= link_to "Next Day", '/predictions/' + @date.to_date.year.to_s + "/" + 
                  @date.to_date.month.to_s + "/" + (@date.to_date + 1.day).day.to_s,
                 { :style=>"float: right;" }%>
@@ -14,7 +14,7 @@
       <th data-field="opponent" data-sortable="true"><%= "Prediciton" %></th>
       <th data-field="opponent" data-sortable="true"><%= "Line Difference" %></th>
       <th data-field="opponent" data-sortable="true"><%= "O/U Difference" %></th>
-      <% if @date.to_date != Date.today %>
+      <% if @date.to_date != (Time.zone.now - 8.hours).to_date %>
         <th data-field="opponent" data-sortable="true"><%= "Score" %></th>
         <th data-field="opponent" data-sortable="true"><%= "Line Win" %></th>
       <% end %>
@@ -57,7 +57,7 @@
           -
         <% end %>
         </td>
-        <% if @date.to_date != Date.today %>
+        <% if @date.to_date != (Time.zone.now - 8.hours).to_date %>
           <td><%= game.away_score.to_s + " - " + game.home_score.to_s %></td>
           <% outcome = game.away_score.to_i - game.home_score.to_i %>
           <td>
@@ -78,7 +78,7 @@
         <% end %>
         </tr>
     <% end %>
-    <% if @date.to_date != Date.today %>
+    <% if @date.to_date != (Time.zone.now - 8.hours).to_date %>
       <tr style="font-weight:bold">
         <td></td>
         <td></td>
