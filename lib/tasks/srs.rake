@@ -240,7 +240,7 @@ namespace :srs do
         if team.tempo == nil
           team.tempo = 69
         end
-        team.games.each do |game|
+        team.games.order(date: :asc).each do |game|
           teamscore = nil
           if team.school_name == game.home_team
             opponent = game.away_team

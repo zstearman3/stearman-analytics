@@ -9,7 +9,7 @@
       <th data-field="opponent" data-sortable="false"><%= "Opponent" %></th>
       <th data-field="opponent" data-sortable="false"><%= "Result" %></th>
     </tr>
-    <% @team.games.each do |game| %>
+    <% @team.games.order(date: :asc).each do |game| %>
       <% result = "L" %>
       <tr>
         <td><%=  game[:date].strftime("%m/%d/%Y") %></td>
