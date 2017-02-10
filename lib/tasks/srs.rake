@@ -227,13 +227,13 @@ namespace :srs do
   end
   
   task :simple_rating => :environment do
-    Team.all.each do |team|
-      team.ortg = 103.0
-      team.drtg = 103.0
-      team.tempo = 69.0
-      team.save
-    end
-    5.times do
+    # Team.all.each do |team|
+    #   team.ortg = 103.0
+    #   team.drtg = 103.0
+    #   team.tempo = 69.0
+    #   team.save
+    # end
+    2.times do
       error = 0
       Team.all.each do |team|
         team.games.order(date: :asc).each do |game|
