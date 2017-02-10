@@ -227,19 +227,25 @@ namespace :srs do
   end
   
   task :simple_rating => :environment do
+    Team.all.each do |team|
+      team.ortg = 103.0
+      team.drtg = 103.0
+      team.tempo = 69.0
+      team.save
+    end
     2.times do
       error = 0
       Team.all.each do |team|
-        # if team.ortg == nil
+        if team.ortg == nil
           team.ortg = 102
-          # puts team
-        # end
-        # if team.drtg == nil
+          puts team
+        end
+        if team.drtg == nil
           team.drtg = 102
-        # end
-        # if team.tempo == nil
+        end
+        if team.tempo == nil
           team.tempo = 69
-        # end
+        end
         team.save
         team.games.order(date: :asc).each do |game|
           teamscore = nil
@@ -266,14 +272,14 @@ namespace :srs do
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
             if team.school_name == game.home_team
-              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.98))))
+              team.ortg = team.ortg + (0.16 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.98))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.02))))
+              team.drtg = team.drtg + (0.16 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.02))))
               team.drtg = team.drtg.round(2)
             else
-              team.ortg = team.ortg + (0.2 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.02))))
+              team.ortg = team.ortg + (0.16 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.02))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.2 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.98))))
+              team.drtg = team.drtg + (0.16 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.98))))
               team.drtg = team.drtg.round(2)
             end
             team.save
