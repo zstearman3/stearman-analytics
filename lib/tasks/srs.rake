@@ -272,14 +272,14 @@ namespace :srs do
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
             if team.school_name == game.home_team
-              team.ortg = team.ortg + (0.16 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.98))))
+              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.98))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.16 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.02))))
+              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.02))))
               team.drtg = team.drtg.round(2)
             else
-              team.ortg = team.ortg + (0.16 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.02))))
+              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.02))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.16 * ((opponentscore * (100.00 /game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.98))))
+              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.98))))
               team.drtg = team.drtg.round(2)
             end
             team.save
@@ -289,11 +289,11 @@ namespace :srs do
         # this section 2 times. 
         if team.games.count != 0
           oldrating = team.rating || 0
-          team.rating = ((team.ortg - 100) + (100 - team.drtg))/2
-          team.rating = team.rating.round(1)
+          team.rating = ((team.ortg - 103.0) + (103.0 - team.drtg))/2
+          team.rating = team.rating.round(2)
           team.save
           error = error + (team.rating - oldrating).abs
-          error = error.round(1)
+          error = error.round(2)
         end
       end
       puts error
