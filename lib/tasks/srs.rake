@@ -233,7 +233,7 @@ namespace :srs do
     #   team.tempo = 69.0
     #   team.save
     # end
-    20.times do
+    2.times do
       error = 0
       Team.all.each do |team|
         team.games.order(date: :asc).each do |game|
