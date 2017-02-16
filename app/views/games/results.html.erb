@@ -11,7 +11,7 @@
 </p>
 <% wins = 0 %>
 <% losses = 0 %>
-<% Game.where.not(homecalc: "0").where.not(home_score: "0").each do |su| %>
+<% Game.where.not(homecalc: "0").where.not(home_score: "0").where("date > ?", "2017/02/15".to_date).each do |su| %>
  <% if su.home_score > su.away_score %>
    <% if su.homecalc > su.awaycalc %>
       <% wins += 1 %>
