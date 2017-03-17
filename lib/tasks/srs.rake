@@ -186,8 +186,8 @@ namespace :srs do
             existinggame.overunder = @overunder
             existinggame.spread = @spread
             if hometeam && awayteam
-              homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 0.98)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-              awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.02)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 1.0)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+              awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.0)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
               existinggame.homecalc = homescore.round(0)
               existinggame.awaycalc = awayscore.round(0)
               existinggame.spreaddiff = (existinggame.awaycalc - existinggame.homecalc) - existinggame.spread
@@ -206,8 +206,8 @@ namespace :srs do
         @t.spread = @spread
         if hometeam && awayteam
           @t.teams = hometeam, awayteam
-          homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 0.98)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
-          awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.02)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          homescore = (((hometeam.ortg * awayteam.drtg) / (103.0 * 1.0)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
+          awayscore = (((awayteam.ortg * hometeam.drtg) / (103.0 * 1.0)) * ((hometeam.tempo * awayteam.tempo) / (70.0))) / 100.0
           @t.homecalc = homescore.round(0)
           @t.awaycalc = awayscore.round(0)
           halfaway = ((awayscore * 2.0).round(0)) / 2.0
@@ -227,12 +227,12 @@ namespace :srs do
   end
   
   task :simple_rating => :environment do
-    # Team.all.each do |team|
-    #   team.ortg = 103.0
-    #   team.drtg = 103.0
+    Team.all.each do |team|
+       team.homeadv = 0
+       team.awayadv = 0
     #   team.tempo = 69.0
-    #   team.save
-    # end
+       team.save
+    end
     2.times do
       error = 0
       Team.all.each do |team|
@@ -261,15 +261,17 @@ namespace :srs do
             # 0.2 is an arbitrary multiplier. Should change on a game by game basis probably.
             
             if team.school_name == game.home_team
-              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 0.98))))
+              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - (((team.ortg + 2.0) * opp_drtg) / (100.0))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 1.02))))
+              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - (((team.drtg + 2.0) * opp_ortg)/ (100.0))))
               team.drtg = team.drtg.round(2)
+              team.homeadv = team.homeadv + ((teamscore * (100.0 / game.posessions)) - (((team.ortg + 2.0) * opp_drtg) / (100.0))) - ((opponentscore * (100.00 / game.posessions)) - (((team.drtg + 2.0) * opp_ortg)/ (100.0)))
             else
-              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - ((team.ortg * opp_drtg) / (103.0 * 1.02))))
+              team.ortg = team.ortg + (0.175 * ((teamscore * (100.0 / game.posessions)) - (((team.ortg - 2.0) * opp_drtg) / (100.0))))
               team.ortg = team.ortg.round(2)
-              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - ((team.drtg * opp_ortg)/ (103.00 * 0.98))))
+              team.drtg = team.drtg + (0.175 * ((opponentscore * (100.00 / game.posessions)) - (((team.drtg - 2.0) * opp_ortg)/ (100.0))))
               team.drtg = team.drtg.round(2)
+              team.awayadv = team.awayadv + ((teamscore * (100.0 / game.posessions)) - (((team.ortg - 2.0) * opp_drtg) / (100.0))) - ((opponentscore * (100.0 / game.posessions)) - (((team.drtg - 2.0) * opp_ortg) / (100.0)))
             end
             team.save
           end
@@ -293,12 +295,15 @@ namespace :srs do
       team.losses = 0
       team.conf_wins = 0
       team.conf_losses = 0
+      homecount = 0
+      awaycount = 0
       team.rank = Team.where("rating > ?", team.rating).where.not(school_name: "dummy").count + 1
       puts team.rank
       @teamname = team.school_name
       team.games.each do |game|
         if game.home_score
           if game.home_team == @teamname
+            homecount = homecount + 1
             opponent = Team.find_by(school_name: game.away_team)
             if game.home_score > game.away_score
               team.wins += 1
@@ -315,6 +320,7 @@ namespace :srs do
               end
             end
           else
+            awaycount = awaycount + 1
             opponent = Team.find_by(school_name: game.home_team)
             if game.home_score > game.away_score
               team.losses += 1
@@ -333,6 +339,8 @@ namespace :srs do
           end
         end
       end
+      team.homeadv = (20.0 + (homecount * (2.0 + (team.homeadv / (2 * homecount))))) / (10 + homecount)
+      team.awayadv = (-20.0 + (awaycount * (-2.0 + (team.awayadv / (2 * awaycount))))) / (10 + awaycount)
       team.save
     end
   end
